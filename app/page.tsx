@@ -1,7 +1,7 @@
 export default function Index(){
     return(
-        <h1>
-            Stellar Wallet
-        </h1>
+        <div className="h-screen bg-cyan-950">
+
+        </div>
     )
 }
