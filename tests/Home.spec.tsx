@@ -1,11 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Home from '../app/page'; // Asegúrate de que la ruta al archivo sea correcta
+import Home from '../app/page'; 
 
 test('should render correctly', () => {
   const { getByText } = render(<Home />);
-  const titleElement = getByText("Hello");
+  const titleElement = getByText("Stellar Wallet");
 
-  // Realiza una aserción usando expect
   expect(titleElement).toBeInTheDocument();
 });
