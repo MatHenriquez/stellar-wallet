@@ -18,9 +18,13 @@ export default function Index() {
 
       {/* Login */}
       <div className="grid grid-cols-1 md:grid-cols-2 place-items-center row-span-5">
+
+        {/* Sign in button */}
         <div className="relative mb-12 px-3 lg:mb-0">
           <a className="cursor-pointer underline underline-offset-8">Sign In with your Secret Key</a>
         </div>
+
+        {/* Sign up button */}
         <div className="relative mb-12 px-3 lg:mb-0">
           <a className="cursor-pointer underline underline-offset-8">Create new keys and Sign Up</a>
         </div>
