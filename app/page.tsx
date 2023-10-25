@@ -5,23 +5,22 @@ import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { useState } from "react";
 
-interface KeyPair {
+interface IKeyPair {
   publicKey: string;
   secretKey: string;
 }
 
 const Index: FC = () => {
-  const [keys, setKeys] = useState({} as KeyPair);
+  const [keys, setKeys] = useState({} as IKeyPair);
 
   function handleCreateClick(): void {
     const newKeys: Keypair = generateKeys();
 
-    const generatedKeys: KeyPair = {} as KeyPair;
+    const generatedKeys: IKeyPair = {} as IKeyPair;
     generatedKeys.publicKey = newKeys.publicKey();
     generatedKeys.secretKey = newKeys.secret();
 
     setKeys(generatedKeys);
-    console.log(generatedKeys);
   }
 
   return (
