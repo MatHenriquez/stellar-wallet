@@ -11,6 +11,9 @@ interface KeyPair {
 }
 
 const Index: FC = () => {
+
+  const [keys, setKeys] = useState({} as KeyPair);
+
   function handleCreateClick(): KeyPair {
     const newKeys: Keypair = generateKeys();
 
