@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
+import InfoModal from "./components/InfoModal";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
@@ -48,6 +49,7 @@ const Index: FC = () => {
             Create new keys and Sign Up
           </a>
         </div>
+        <InfoModal keys = {keys}/>
       </div>
     </div>
   );
