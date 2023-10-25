@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
+import { useState } from "react";
 
 interface KeyPair {
   publicKey: string;
