@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
