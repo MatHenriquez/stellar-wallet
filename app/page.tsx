@@ -1,9 +1,8 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
-import { useState } from "react";
 
 interface IKeyPair {
   publicKey: string;
