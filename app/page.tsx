@@ -3,6 +3,11 @@
 import { FC } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 
+interface KeyPair{
+  publicKey: string;
+  secretKey: string;
+}
+
 const Index: FC = () => {
   return (
     <div className="grid grid-cols-1 grid-rows-6 h-screen bg-cyan-950">
