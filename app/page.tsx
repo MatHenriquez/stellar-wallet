@@ -21,7 +21,7 @@ const Index: FC = () => {
     generatedKeys.publicKey = newKeys.publicKey();
     generatedKeys.secretKey = newKeys.secret();
 
-    return generatedKeys;
+    setKeys(generatedKeys);
   }
 
   return (
