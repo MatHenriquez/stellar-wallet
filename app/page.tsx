@@ -1,17 +1,21 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
-import { useState } from "react";
-
-interface IKeyPair {
-  publicKey: string;
-  secretKey: string;
-}
+import { IKeyPair } from "./interfaces/keys";
+import InfoModal from "./components/InfoModal";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
+
+  useEffect(() => {
+    const init = async () => {
+      const { Modal, Ripple, initTE } = await import("tw-elements");
+      initTE({ Modal, Ripple });
+    };
+    init();
+  }, []);
 
   function handleCreateClick(): void {
     const newKeys: Keypair = generateKeys();
@@ -49,10 +53,15 @@ const Index: FC = () => {
           <a
             className="cursor-pointer underline underline-offset-8"
             onClick={handleCreateClick}
+            data-te-toggle="modal"
+            data-te-target="#InfoModal"
+            data-te-ripple-init
+            data-te-ripple-color="light"
           >
             Create new keys and Sign Up
           </a>
         </div>
+        <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
       </div>
     </div>
   );
