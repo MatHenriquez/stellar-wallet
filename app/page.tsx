@@ -1,4 +1,6 @@
-export default function Index() {
+import { FC } from "react";
+
+const Index: FC = () => {
   return (
     <div className="grid grid-cols-1 grid-rows-6 h-screen bg-cyan-950">
       <nav className="relative flex w-full flex-wrap items-center justify-between py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700  lg:py-4">
@@ -29,4 +31,6 @@ export default function Index() {
       </div>
     </div>
   );
-}
+};
+
+export default Index;
