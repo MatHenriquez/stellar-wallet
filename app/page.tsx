@@ -9,6 +9,14 @@ import InfoModal from "./components/InfoModal";
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
 
+  useEffect(() => {
+    const init = async () => {
+      const { Modal, Ripple, initTE } = await import("tw-elements");
+      initTE({ Modal, Ripple });
+    };
+    init();
+  }, []);
+
   function handleCreateClick(): void {
     const newKeys: Keypair = generateKeys();
 
