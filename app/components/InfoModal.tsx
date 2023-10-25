@@ -36,8 +36,9 @@ const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }: IKeyPair) => {
           </div>
 
           <div className="relative p-4">
-            <p>Public Key: {publicKey}</p>
-            <p>Secret Key: {secretKey}</p>
+            <p className="break-words">Public Key: {publicKey}</p>
+            <hr />
+            <p className="break-words">Secret Key: {secretKey}</p>
           </div>
 
           <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
