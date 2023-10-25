@@ -3,11 +3,7 @@
 import { FC, useState } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
-
-interface IKeyPair {
-  publicKey: string;
-  secretKey: string;
-}
+import { IKeyPair } from "./interfaces/keys";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
