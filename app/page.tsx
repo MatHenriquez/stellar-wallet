@@ -11,7 +11,6 @@ interface KeyPair {
 }
 
 const Index: FC = () => {
-
   const [keys, setKeys] = useState({} as KeyPair);
 
   function handleCreateClick(): void {
@@ -48,7 +47,10 @@ const Index: FC = () => {
         </div>
 
         <div className="relative mb-12 px-3 lg:mb-0">
-          <a className="cursor-pointer underline underline-offset-8" onClick={handleCreateClick}>
+          <a
+            className="cursor-pointer underline underline-offset-8"
+            onClick={handleCreateClick}
+          >
             Create new keys and Sign Up
           </a>
         </div>
