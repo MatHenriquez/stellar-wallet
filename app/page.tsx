@@ -14,7 +14,7 @@ const Index: FC = () => {
 
   const [keys, setKeys] = useState({} as KeyPair);
 
-  function handleCreateClick(): KeyPair {
+  function handleCreateClick(): void {
     const newKeys: Keypair = generateKeys();
 
     const generatedKeys: KeyPair = {} as KeyPair;
@@ -22,6 +22,7 @@ const Index: FC = () => {
     generatedKeys.secretKey = newKeys.secret();
 
     setKeys(generatedKeys);
+    console.log(generatedKeys);
   }
 
   return (
