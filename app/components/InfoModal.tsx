@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { IKeyPair } from "../interfaces/IKeyPair";
+import { IKeyPair } from "../interfaces/keys";
 
 const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }) => {
     return (
