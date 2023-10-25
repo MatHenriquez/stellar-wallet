@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { IKeyPair } from "../interfaces/keys";
 
-const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }) => {
+const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }: IKeyPair) => {
   return (
     <div
       data-te-modal-init

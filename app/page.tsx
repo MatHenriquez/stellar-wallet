@@ -49,7 +49,7 @@ const Index: FC = () => {
             Create new keys and Sign Up
           </a>
         </div>
-        <InfoModal keys = {keys}/>
+        <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
       </div>
     </div>
   );
