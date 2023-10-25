@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { generateKeys } from "./helpers/generateKeys";
 
 const Index: FC = () => {
   return (
