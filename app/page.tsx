@@ -64,7 +64,7 @@ const Index: FC = () => {
           </a>
         </div>
         <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
-        <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
+        {showLoginModal ? (<LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal}/>) : null}
       </div>
     </div>
   );
