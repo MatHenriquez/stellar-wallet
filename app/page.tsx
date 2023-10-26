@@ -9,6 +9,7 @@ import LoginModal from "./components/LoginModal";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const init = async () => {
