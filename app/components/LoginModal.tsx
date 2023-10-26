@@ -33,7 +33,7 @@ const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => voi
                       type="button"
                       onClick={() => setShowModal(false)}
                     >
-                      Save Changes
+                      Sign In
                     </button>
                   </form>
                 </div>
