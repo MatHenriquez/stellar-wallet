@@ -5,6 +5,7 @@ import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
+import LoginModal from "./components/LoginModal";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
@@ -62,6 +63,7 @@ const Index: FC = () => {
           </a>
         </div>
         <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
+        <LoginModal />
       </div>
     </div>
   );
