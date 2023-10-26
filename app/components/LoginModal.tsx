@@ -27,7 +27,7 @@ const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => voi
 
                 <div className="relative p-6 flex-auto">
                   <form action="">
-                    <input type="password" />
+                    <input type="password" className="bg-slate-500 w-full"/>
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-14 ease-linear transition-all duration-150"
                       type="button"
