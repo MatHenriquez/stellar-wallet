@@ -29,7 +29,7 @@ const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => voi
                   <form action="">
                     <input type="password" className="bg-slate-500 w-full" placeholder="Secret key..."/>
                     <button
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ml-14 ease-linear transition-all duration-150"
+                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                       onClick={() => setShowModal(false)}
                     >
