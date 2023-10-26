@@ -2,8 +2,7 @@
 
 import { FC, useState } from "react";
 
-const LoginModal: FC = () => {
-  const [showModal, setShowModal] = useState(false);
+const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => void }> = ({ showModal, setShowModal }) => {
 
   return (
     <>
