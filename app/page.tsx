@@ -6,10 +6,12 @@ import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
+import { login } from "./helpers/login";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginKey, setLoginKey] = useState("" as string);
 
   useEffect(() => {
     const init = async () => {
@@ -46,7 +48,10 @@ const Index: FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 place-items-center row-span-5">
         <div className="relative mb-12 px-3 lg:mb-0">
-          <a className="cursor-pointer underline underline-offset-8" onClick={() => setShowLoginModal(true)}>
+          <a
+            className="cursor-pointer underline underline-offset-8"
+            onClick={() => setShowLoginModal(true)}
+          >
             Sign In with your Secret Key
           </a>
         </div>
@@ -64,7 +69,15 @@ const Index: FC = () => {
           </a>
         </div>
         <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
-        {showLoginModal ? (<LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal}/>) : null}
+        {showLoginModal ? (
+          <LoginModal
+            showModal={showLoginModal}
+            setShowModal={setShowLoginModal}
+            login={login}
+            secretKey={loginKey}
+            setSecretKey={setLoginKey}
+          />
+        ) : null}
       </div>
     </div>
   );
