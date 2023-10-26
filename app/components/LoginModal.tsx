@@ -2,8 +2,10 @@
 
 import { FC } from "react";
 
-const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => void }> = ({ showModal, setShowModal }) => {
-
+const LoginModal: FC<{
+  showModal: boolean;
+  setShowModal: (value: boolean) => void;
+}> = ({ showModal, setShowModal }) => {
   return (
     <>
       {showModal ? (
@@ -19,7 +21,11 @@ const LoginModal: FC<{ showModal: boolean; setShowModal: (value: boolean) => voi
 
                 <div className="relative p-6 flex-auto">
                   <form action="">
-                    <input type="password" className="bg-slate-800 w-full" placeholder="Secret key..."/>
+                    <input
+                      type="password"
+                      className="bg-slate-800 w-full"
+                      placeholder="Secret key..."
+                    />
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 mt-6 ease-linear transition-all duration-150"
                       type="button"
