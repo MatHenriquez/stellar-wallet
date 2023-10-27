@@ -7,11 +7,13 @@ import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
 import loginHelper from "./helpers/login";
+import { set } from "cypress/types/lodash";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginKey, setLoginKey] = useState("" as string);
+  const [errorMessage, setErrorMessage] = useState("" as string);
 
   useEffect(() => {
     const init = async () => {
@@ -32,9 +34,13 @@ const Index: FC = () => {
   }
 
   function handleLogin(secretKey: string): void {
-    const publickKey = loginHelper.getPublicKey(secretKey);
-    loginHelper.savePublicKey(publickKey);
-    loginHelper.redirectToDashboard();
+    try {
+      const publickKey: string = loginHelper.getPublicKey(secretKey);
+      loginHelper.savePublicKey(publickKey);
+      loginHelper.redirectToDashboard();
+    } catch (error) {
+      setErrorMessage("Invalid secret key");
+    }
   }
 
   return (
@@ -82,6 +88,8 @@ const Index: FC = () => {
             login={handleLogin}
             secretKey={loginKey}
             setSecretKey={setLoginKey}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
           />
         ) : null}
       </div>
