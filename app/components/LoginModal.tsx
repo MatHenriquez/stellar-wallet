@@ -10,6 +10,8 @@ const LoginModal: FC<{
   login: (secretKey: string) => void;
 }> = ({ showModal, setShowModal, secretKey, setSecretKey, login }) => {
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    const errorTag = document.querySelector("#error");
+    if(errorTag) errorTag.textContent = "";
     setSecretKey(e.target.value);
   }
 
@@ -39,6 +41,7 @@ const LoginModal: FC<{
                       placeholder="Secret key..."
                       onChange={handleInputChange}
                     />
+                    <p id="error" className="text-red-600 bg-red-100"></p>
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 mt-6 ease-linear transition-all duration-150"
                       type="button"
