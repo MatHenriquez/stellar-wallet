@@ -5,7 +5,22 @@ import { FC } from "react";
 const LoginModal: FC<{
   showModal: boolean;
   setShowModal: (value: boolean) => void;
-}> = ({ showModal, setShowModal }) => {
+  secretKey: string;
+  setSecretKey: (value: string) => void;
+  login: (secretKey: string) => void;
+  errorMessage: string;
+  setErrorMessage: (value: string) => void;
+}> = ({ showModal, setShowModal, secretKey, setSecretKey, login, errorMessage, setErrorMessage }) => {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setErrorMessage("");
+    setSecretKey(e.target.value);
+  }
+
+  function handleLoginClick(e: React.MouseEvent<HTMLButtonElement>): void {
+    e.preventDefault();
+    login(secretKey);
+  }
+
   return (
     <>
       {showModal ? (
@@ -25,11 +40,13 @@ const LoginModal: FC<{
                       type="password"
                       className="bg-slate-800 w-full"
                       placeholder="Secret key..."
+                      onChange={handleInputChange}
                     />
+                    <p className="text-red-600 bg-red-100">{errorMessage}</p>
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 mt-6 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={() => setShowModal(false)}
+                      onClick={handleLoginClick}
                     >
                       Sign In
                     </button>

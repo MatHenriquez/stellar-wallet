@@ -6,10 +6,14 @@ import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
+import loginHelper from "./helpers/login";
+import { set } from "cypress/types/lodash";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginKey, setLoginKey] = useState("" as string);
+  const [errorMessage, setErrorMessage] = useState("" as string);
 
   useEffect(() => {
     const init = async () => {
@@ -29,6 +33,16 @@ const Index: FC = () => {
     setKeys(generatedKeys);
   }
 
+  function handleLogin(secretKey: string): void {
+    try {
+      const publickKey: string = loginHelper.getPublicKey(secretKey);
+      loginHelper.savePublicKey(publickKey);
+      loginHelper.redirectToDashboard();
+    } catch (error) {
+      setErrorMessage("Invalid secret key");
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 grid-rows-6 h-screen bg-cyan-950">
       <nav className="relative flex w-full flex-wrap items-center justify-between py-2 text-neutral-500 shadow-lg hover:text-neutral-700 focus:text-neutral-700  lg:py-4">
@@ -46,7 +60,10 @@ const Index: FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 place-items-center row-span-5">
         <div className="relative mb-12 px-3 lg:mb-0">
-          <a className="cursor-pointer underline underline-offset-8" onClick={() => setShowLoginModal(true)}>
+          <a
+            className="cursor-pointer underline underline-offset-8"
+            onClick={() => setShowLoginModal(true)}
+          >
             Sign In with your Secret Key
           </a>
         </div>
@@ -64,7 +81,17 @@ const Index: FC = () => {
           </a>
         </div>
         <InfoModal publicKey={keys.publicKey} secretKey={keys.secretKey} />
-        {showLoginModal ? (<LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal}/>) : null}
+        {showLoginModal ? (
+          <LoginModal
+            showModal={showLoginModal}
+            setShowModal={setShowLoginModal}
+            login={handleLogin}
+            secretKey={loginKey}
+            setSecretKey={setLoginKey}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+          />
+        ) : null}
       </div>
     </div>
   );
