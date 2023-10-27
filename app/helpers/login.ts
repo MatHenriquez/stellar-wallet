@@ -1,11 +1,11 @@
 import { Keypair } from "stellar-sdk";
 
-function isSecretKeyValid(secretKey: string): boolean {
+function getPublicKey(secretKey: string): string {
   try {
-    Keypair.fromSecret(secretKey);
-    return true;
+    return Keypair.fromSecret(secretKey).publicKey();
   } catch (error) {
-    return false;
+    alert("Invalid secret key");
+    throw new Error("Invalid secret key");
   }
 }
 
@@ -16,4 +16,3 @@ const redirectToDashboard = (): void => {
 const savePublicKey = (publicKey: string): void => {
   localStorage.setItem("publicKey", publicKey);
 };
-
