@@ -4,7 +4,8 @@ function getPublicKey(secretKey: string): string {
   try {
     return Keypair.fromSecret(secretKey).publicKey();
   } catch (error) {
-    alert("Invalid secret key");
+    const errorTag = document.querySelector("#error");
+    if(errorTag) errorTag.textContent = "Invalid secret key";
     throw new Error("Invalid secret key");
   }
 }
