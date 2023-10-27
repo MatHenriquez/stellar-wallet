@@ -31,7 +31,7 @@ const Index: FC = () => {
     setKeys(generatedKeys);
   }
 
-  function handleLogin(secretKey:string):void {
+  function handleLogin(secretKey: string): void {
     const publickKey = loginHelper.getPublicKey(secretKey);
     loginHelper.savePublicKey(publickKey);
     loginHelper.redirectToDashboard();
