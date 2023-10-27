@@ -9,11 +9,11 @@ function isSecretKeyValid(secretKey: string): boolean {
   }
 }
 
-export function login(secretKey: string): void {
-  if (isSecretKeyValid(secretKey)) {
-    const keypair: Keypair = Keypair.fromSecret(secretKey);
-    const publicKey = keypair.publicKey();
-    localStorage.setItem("publicKey", publicKey);
-    window.location.href = "/dashboard";
-  } else alert("Incorrect secret key");
-}
+const redirectToDashboard = (): void => {
+  window.location.href = "/dashboard";
+};
+
+const savePublicKey = (publicKey: string): void => {
+  localStorage.setItem("publicKey", publicKey);
+};
+
