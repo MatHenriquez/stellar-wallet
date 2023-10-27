@@ -6,7 +6,7 @@ import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
-import { login } from "./helpers/login";
+import loginHelper from "./helpers/login";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
@@ -29,6 +29,12 @@ const Index: FC = () => {
     generatedKeys.secretKey = newKeys.secret();
 
     setKeys(generatedKeys);
+  }
+
+  function handleLogin(secretKey:string):void {
+    const publickKey = loginHelper.getPublicKey(secretKey);
+    loginHelper.savePublicKey(publickKey);
+    loginHelper.redirectToDashboard();
   }
 
   return (
@@ -73,7 +79,7 @@ const Index: FC = () => {
           <LoginModal
             showModal={showLoginModal}
             setShowModal={setShowLoginModal}
-            login={login}
+            login={handleLogin}
             secretKey={loginKey}
             setSecretKey={setLoginKey}
           />

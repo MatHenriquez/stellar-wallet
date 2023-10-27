@@ -16,3 +16,9 @@ const redirectToDashboard = (): void => {
 const savePublicKey = (publicKey: string): void => {
   localStorage.setItem("publicKey", publicKey);
 };
+
+export default {
+  getPublicKey,
+  redirectToDashboard,
+  savePublicKey,
+};
