@@ -8,7 +8,7 @@ const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }: IKeyPair) => {
     <div
       data-te-modal-init
       className="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
-      id="InfoModal"
+      id="info-modal"
       tabIndex={-1}
       aria-labelledby="exampleModalCenterTitle"
       aria-modal="true"
