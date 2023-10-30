@@ -10,7 +10,15 @@ const LoginModal: FC<{
   login: (secretKey: string) => void;
   errorMessage: string;
   setErrorMessage: (value: string) => void;
-}> = ({ showModal, setShowModal, secretKey, setSecretKey, login, errorMessage, setErrorMessage }) => {
+}> = ({
+  showModal,
+  setShowModal,
+  secretKey,
+  setSecretKey,
+  login,
+  errorMessage,
+  setErrorMessage,
+}) => {
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setErrorMessage("");
     setSecretKey(e.target.value);
@@ -42,8 +50,9 @@ const LoginModal: FC<{
                       placeholder="Secret key..."
                       onChange={handleInputChange}
                     />
-                    <p className="text-red-600 bg-red-100">{errorMessage}</p>
+                    <p id="error-message" className="text-red-600 bg-red-100">{errorMessage}</p>
                     <button
+                      id="signin-button"
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 mt-6 ease-linear transition-all duration-150"
                       type="button"
                       onClick={handleLoginClick}
@@ -55,6 +64,7 @@ const LoginModal: FC<{
 
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button
+                    id="close-button"
                     className="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
                     type="button"
                     onClick={() => setShowModal(false)}
