@@ -22,7 +22,7 @@ const InfoModal: FC<IKeyPair> = ({ publicKey, secretKey }: IKeyPair) => {
           <div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
             <h5
               className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
-              id="exampleModalCenterTitle"
+              id="ModalTitle"
             >
               Keys
             </h5>
