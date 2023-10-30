@@ -19,4 +19,23 @@ describe("Home", () => {
       "Create new keys and Sign Up"
     );
   });
+
+  it("should show the keys when clicking the create new keys link", () => {
+    cy.get('[data-te-target="#InfoModal"]').click();
+    cy.contains("Public Key: ");
+    cy.contains("Secret Key: ");
+  });
+
+  it("should show the login modal when clicking the sign in link", () => {
+    cy.contains("Sign In with your Secret Key").click();
+    cy.contains("Sign in with a secret Key");
+    cy.contains("Sign In");
+  });
+
+  it("should close de login modal when clicking the close button", () => {
+    cy.contains("Sign In with your Secret Key").click();
+    cy.get('#signin-button').should('exist');
+    cy.get('#close-button').click();
+    cy.get('#login-modal').should('not.exist');
+  });
 });
