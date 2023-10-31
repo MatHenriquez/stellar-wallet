@@ -60,11 +60,15 @@ const UserKey: FC<{
   handleCopyText: (text: string) => void;
   linkText: string;
 }> = ({ publicKey, handleCopyText, linkText }) => {
+  const abbreviatePublicKey: (key: string) => string = (
+    publicKey: string
+  ): string => {
+    return publicKey.slice(0, 5) + "..." + publicKey.slice(-2);
+  };
+
   return (
     <div className="flex">
-      <p className="text-sm font-bold mr-2">
-        {publicKey.slice(0, 5) + "..." + publicKey.slice(-2)}
-      </p>
+      <p className="text-sm font-bold mr-2">{abbreviatePublicKey(publicKey)}</p>
       <button
         className="text-sm underline underline-offset-2"
         onClick={() => handleCopyText(publicKey)}
