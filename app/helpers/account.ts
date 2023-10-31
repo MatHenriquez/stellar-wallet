@@ -1,5 +1,5 @@
 import { Server } from "stellar-sdk";
-const server: Server = new Server("https://horizon-testnet.stellar.org");
+const server: Server = new Server(process.env.NEXT_PUBLIC_SERVER_URL || "");
 
 const loadAccount = async (publicKey: string) => {
   try {
