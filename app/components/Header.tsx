@@ -9,11 +9,14 @@ const Navbar: FC<{
   const [linkText, setLinkText] = useState("copy");
 
   const handleCopyText: (text: string) => void = (text): void => {
+    const DELAY_IN_MILLISECONDS = 1000;
+
     navigator.clipboard.writeText(text);
     setLinkText("copied!");
+
     setTimeout(() => {
       setLinkText("copy");
-    }, 1000);
+    }, DELAY_IN_MILLISECONDS);
   };
 
   const handleLogOut: () => void = () => {
