@@ -6,7 +6,7 @@ import accountHelper from "../helpers/account";
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(true);
   const [publicKey, setPublicKey] = useState("" as string);
-  const [isLogged, setIsLogged] = useState(publicKey !== "");
+  const [isLogged, setIsLogged] = useState(true);
   const [balance, setBalance] = useState("" as string | undefined);
 
   const getAccountBalance = async (publicKey: string) => {
