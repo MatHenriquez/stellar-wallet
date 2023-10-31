@@ -3,8 +3,7 @@ const server: Server = new Server("https://horizon-testnet.stellar.org");
 
 const loadAccount = async (publicKey: string) => {
   try {
-    const account = await server.loadAccount(publicKey);
-    return account;
+    return await server.loadAccount(publicKey);
   } catch (error) {
     throw new Error("Unfunded account");
   }
