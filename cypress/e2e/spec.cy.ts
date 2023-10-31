@@ -69,4 +69,64 @@ describe("End-to-End testing", () => {
       cy.get("#error-message").should("not.exist");
     });
   });
+
+  describe("Footer", () => {
+    beforeEach(() => {
+      cy.visit("/");
+    });
+
+    it("Should be rendered", () => {
+      cy.get('[data-cy="footer-container"]').should("exist");
+    });
+
+    it("Should have the proper background color", () => {
+      cy.get('[data-cy="footer-container"]').should(
+        "have.css",
+        "background-color",
+        "rgb(22, 78, 99)"
+      );
+    });
+
+    it("Should have the proper text color", () => {
+      cy.get('[data-cy="footer-container"]').should(
+        "have.css",
+        "color",
+        "rgb(255, 255, 255)"
+      );
+    });
+
+    it("Should display the informative links", () => {
+      cy.get('[data-cy="terms-link"]').should("have.text", "Terms of Service");
+      cy.get('[data-cy="privacy-link"]').should("have.text", "Privacy Policy");
+      cy.get('[data-cy="repository-link"]').should("exist");
+    });
+
+    describe("Footer links", () => {
+      beforeEach(() => {
+        cy.visit("/");
+      });
+
+      it("Terms of service link should open the terms of service page in a new tab", () => {
+        cy.get('[data-cy="terms-link"]')
+          .should("have.attr", "target", "blank")
+          .should("have.attr", "href", "https://stellar.org/terms-of-service");
+      });
+
+      it("Privacy policy link should open the the privacy policy page in a new tab", () => {
+        cy.get('[data-cy="privacy-link"]')
+          .should("have.attr", "target", "blank")
+          .should("have.attr", "href", "https://stellar.org/privacy-policy");
+      });
+
+      it("Repository link should should open the repository page in a new tab", () => {
+        cy.get('[data-cy="repository-link"]')
+          .should("have.attr", "target", "blank")
+          .should(
+            "have.attr",
+            "href",
+            "https://github.com/MatHenriquez/stellar-wallet"
+          );
+      });
+    });
+  });
 });
