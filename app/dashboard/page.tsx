@@ -2,7 +2,6 @@
 import React, { FC, useEffect, useState } from "react";
 import Navbar from "../components/Header";
 import accountHelper from "../helpers/account";
-import { Account } from "stellar-sdk";
 
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(true);
@@ -59,7 +58,7 @@ const KeyView: FC<{publicKey: string}> = ({publicKey}) => {
   return (
       <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
         <h1 className="text-3xl mt-6">Your Stellar Public Key</h1>
-        <p className="text-4xl font-bold mt-8 p-2">{publicKey}</p>
+        <p className="text-4xl font-bold mt-8 p-2 break-words">{publicKey}</p>
       </div>
   );
 };
