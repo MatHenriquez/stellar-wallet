@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useState } from "react";
 import Navbar from "../components/Header";
 import accountHelper from "../helpers/account";
+import Footer from "../components/Footer";
 
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(true);
@@ -33,33 +34,36 @@ const Dashboard: FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cyan-950">
-      <Navbar
-        publicKey={publicKey}
-        isLogged={isLogged}
-        setIsLogged={setIsLogged}
-      />
-      <BalanceData balance={balance}/>
-      <KeyView publicKey={publicKey}/>
-    </div>
+    <>
+      <div className="min-h-screen bg-cyan-950">
+        <Navbar
+          publicKey={publicKey}
+          isLogged={isLogged}
+          setIsLogged={setIsLogged}
+        />
+        <BalanceData balance={balance} />
+        <KeyView publicKey={publicKey} />
+      </div>
+      <Footer />
+    </>
   );
 };
 
-const BalanceData: FC<{balance: string | undefined}> = ({balance}) => {
+const BalanceData: FC<{ balance: string | undefined }> = ({ balance }) => {
   return (
     <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
       <h1 className="text-3xl mt-6">Your Balance</h1>
       <p className="text-4xl font-bold mt-8 p-2">{balance} Lumens (XLM)</p>
     </div>
   );
-}
+};
 
-const KeyView: FC<{publicKey: string}> = ({publicKey}) => {
+const KeyView: FC<{ publicKey: string }> = ({ publicKey }) => {
   return (
-      <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
-        <h1 className="text-3xl mt-6">Your Stellar Public Key</h1>
-        <p className="text-4xl font-bold mt-8 p-2 break-words">{publicKey}</p>
-      </div>
+    <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
+      <h1 className="text-3xl mt-6">Your Stellar Public Key</h1>
+      <p className="text-4xl font-bold mt-8 p-2 break-words">{publicKey}</p>
+    </div>
   );
 };
 
