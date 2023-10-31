@@ -6,14 +6,14 @@ const Footer: FC = () => {
   const gitHubLink: string = "https://github.com/MatHenriquez/stellar-wallet";
 
   return (
-    <div className="bg-cyan-900 h-28 flex flex-row border-solid border-white border-t-2 justify-around">
-      <a href={termsOfService} target="blank" className="self-center underline">
+    <div className="bg-cyan-900 h-28 flex flex-row border-solid border-white border-t-2 justify-around" data-cy="footer-container">
+      <a href={termsOfService} target="blank" className="self-center underline" data-cy="terms-link">
         Terms of Service
       </a>
-      <a href={privacyPolicy} target="blank" className="self-center underline">
+      <a href={privacyPolicy} target="blank" className="self-center underline" data-cy="privacy-link">
         Privacy Policy
       </a>
-      <a href={gitHubLink} target="blank" className="self-center">
+      <a href={gitHubLink} target="blank" className="self-center" data-cy="repository-link">
         <GitHubLogo />
       </a>
     </div>
@@ -27,6 +27,7 @@ const GitHubLogo: FC = () => {
       viewBox="0 0 128 128"
       id="github"
       width={55}
+      data-cy="github-logo"
     >
       <g fill="white">
         <path
