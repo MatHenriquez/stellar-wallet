@@ -10,18 +10,15 @@ const loadAccount = async (publicKey: string) => {
 };
 
 const getBalance = async (publicKey: string): Promise<string | undefined> => {
-  let balance: string | undefined = "0";
 
   try {
     const account = await loadAccount(publicKey);
-    balance = account.balances.find(
+    return account.balances.find(
       (balance) => balance.asset_type === "native"
     )?.balance;
   } catch (error) {
     throw Error("Unfunded account");
   }
-
-  return balance;
 };
 
 export default { loadAccount, getBalance };
