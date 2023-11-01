@@ -30,7 +30,7 @@ const Navbar: FC<{
   };
 
   return (
-    <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-cyan-950 mb-3">
+    <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-cyan-950 mb-3" data-cy="header-container">
       <div className="px-4 flex flex-wrap items-center justify-between w-full">
         <Brand />
         <UserKey
