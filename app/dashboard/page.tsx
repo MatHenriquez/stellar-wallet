@@ -52,8 +52,8 @@ const Dashboard: FC = () => {
 const BalanceData: FC<{ balance: string | undefined }> = ({ balance }) => {
   return (
     <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
-      <h1 className="text-3xl mt-6">Your Balance</h1>
-      <p className="text-4xl font-bold mt-8 p-2">{balance} Lumens (XLM)</p>
+      <h1 className="text-3xl mt-6" data-cy="balance-title">Your Balance</h1>
+      <p className="text-4xl font-bold mt-8 p-2" data-cy="balance-value">{balance} Lumens (XLM)</p>
     </div>
   );
 };
@@ -61,8 +61,8 @@ const BalanceData: FC<{ balance: string | undefined }> = ({ balance }) => {
 const KeyView: FC<{ publicKey: string }> = ({ publicKey }) => {
   return (
     <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
-      <h1 className="text-3xl mt-6">Your Stellar Public Key</h1>
-      <p className="text-4xl font-bold mt-8 p-2 break-words">{publicKey}</p>
+      <h1 className="text-3xl mt-6" data-cy="public-key-title">Your Stellar Public Key</h1>
+      <p className="text-4xl font-bold mt-8 p-2 break-words" data-cy="public-key-value">{publicKey}</p>
     </div>
   );
 };
