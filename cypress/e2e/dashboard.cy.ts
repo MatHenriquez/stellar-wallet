@@ -44,7 +44,7 @@ describe("Dashboard", () => {
     login(keys.loggedUserUnfundedSecretKey);
     cy.get('[data-cy="public-key-value"]').should(
       "have.text",
-      keys.unfundedPublicKey
+      keys.loggedUserUnfundedPublicKey
     );
   });
 
