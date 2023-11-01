@@ -1,19 +1,19 @@
 import { FC } from "react";
 
 const Footer: FC = () => {
-  const termsOfService: string = "https://stellar.org/terms-of-service";
-  const privacyPolicy: string = "https://stellar.org/privacy-policy";
-  const gitHubLink: string = "https://github.com/MatHenriquez/stellar-wallet";
+  const termsOfServiceLink: string = process.env.NEXT_PUBLIC_TERMS_OF_SERVICE_LINK || "";
+  const privacyPolicyLink: string = process.env.NEXT_PUBLIC_PRIVACY_POLICY_LINK || "";
+  const gitHubLinkLink: string = process.env.NEXT_PUBLIC_GITHUB_LINK || "";
 
   return (
     <div className="bg-cyan-900 h-28 flex flex-row border-solid border-white border-t-2 justify-around" data-cy="footer-container">
-      <a href={termsOfService} target="blank" className="self-center underline" data-cy="terms-link">
+      <a href={termsOfServiceLink} target="blank" className="self-center underline" data-cy="terms-link">
         Terms of Service
       </a>
-      <a href={privacyPolicy} target="blank" className="self-center underline" data-cy="privacy-link">
+      <a href={privacyPolicyLink} target="blank" className="self-center underline" data-cy="privacy-link">
         Privacy Policy
       </a>
-      <a href={gitHubLink} target="blank" className="self-center" data-cy="repository-link">
+      <a href={gitHubLinkLink} target="blank" className="self-center" data-cy="repository-link">
         <GitHubLogo />
       </a>
     </div>
