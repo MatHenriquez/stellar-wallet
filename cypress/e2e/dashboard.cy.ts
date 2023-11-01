@@ -117,7 +117,7 @@ describe("Dashboard", () => {
     });
 
     describe("Log out button", () => {
-      const homeUrl: string = Cypress.config().baseUrl || "";
+      const homeUrl: string = Cypress.env("HOME_URL") || "";
 
       it("Should redirect the user to the home page when the he clicks on the log out button", () => {
         login(keys.loggedUserFundedSecretKey);
