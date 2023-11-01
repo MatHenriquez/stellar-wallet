@@ -122,7 +122,7 @@ describe("Dashboard", () => {
       it("Should redirect the user to the home page when the he clicks on the log out button", () => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="log-out-button"]').should("exist").trigger("click");
-        cy.url().should("eq", homeUrl + "/");
+        cy.url().should("eq", `${homeUrl}/`);
       });
 
       it("Should remove the secret key from the local storage when the user clicks on the log out button", () => {
