@@ -4,10 +4,10 @@ describe("Dashboard", () => {
   };
 
   const keys: KeyType = {
-    unfundedPublicKey: Cypress.env("UNFUNDED_PUBLIC_KEY") || "",
-    unfundedSecretKey: Cypress.env("UNFUNDED_SECRET_KEY") || "",
-    fundedPublicKey: Cypress.env("FUNDED_PUBLIC_KEY") || "",
-    fundedSecretKey: Cypress.env("FUNDED_SECRET_KEY") || "",
+    loggedUserUnfundedPublicKey: Cypress.env("LOGGED_USER_PUBLIC_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+    loggedUserUnfundedSecretKey: Cypress.env("LOGGED_USER_SECRET_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+    loggedUserFundedPublicKey: Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
+    loggedUserFundedSecretKey: Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
   };
 
   const login: (secretKey: string) => void = (secretKey) => {
@@ -37,7 +37,7 @@ describe("Dashboard", () => {
   });
 
   it("Should show the correct public key when user logs in with a secret key", () => {
-    login(keys.unfundedSecretKey);
+    login(keys.loggedUserUnfundedSecretKey);
     cy.get('[data-cy="public-key-value"]').should(
       "have.text",
       keys.unfundedPublicKey
@@ -45,7 +45,7 @@ describe("Dashboard", () => {
   });
 
   it("Should show the correct balance for a funded account", () => {
-    login(keys.fundedSecretKey);
+    login(keys.loggedUserFundedSecretKey);
     cy.get('[data-cy="balance-value"]').should(
       "have.text",
       "10000.0000000 Lumens (XLM)"
@@ -53,7 +53,7 @@ describe("Dashboard", () => {
   });
 
   it("Should show the correct balance for an unfunded account", () => {
-    login(keys.unfundedSecretKey);
+    login(keys.loggedUserUnfundedSecretKey);
     cy.get('[data-cy="balance-value"]').should("have.text", "0 Lumens (XLM)");
   });
 
@@ -73,7 +73,7 @@ describe("Dashboard", () => {
       const abbreviatedPublicKey: string = abbreviatePublicKey(
         keys.unfundedPublicKey
       );
-      login(keys.unfundedSecretKey);
+      login(keys.loggedUserUnfundedSecretKey);
       cy.get('[data-cy="abbreviated-public-key"]').should(
         "have.text",
         abbreviatedPublicKey
@@ -102,7 +102,7 @@ describe("Dashboard", () => {
       });
 
       it("Should copy the public key to the clipboard when the user clicks on the copy button", () => {
-        login(keys.fundedSecretKey);
+        login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="copy-button"]').should("exist").trigger("click");
         cy.window().then((win) => {
           win.navigator.clipboard.readText().then((text) => {
@@ -124,7 +124,7 @@ describe("Dashboard", () => {
       const homeUrl: string = Cypress.config().baseUrl || "";
 
       it("Should redirect the user to the home page when the he clicks on the log out button", () => {
-        login(keys.fundedSecretKey);
+        login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="log-out-button"]').should("exist").trigger("click");
         cy.url().should("eq", homeUrl + "/");
       });
