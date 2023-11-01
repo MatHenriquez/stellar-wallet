@@ -4,10 +4,14 @@ describe("Dashboard", () => {
   };
 
   const keys: KeyType = {
-    loggedUserUnfundedPublicKey: Cypress.env("LOGGED_USER_PUBLIC_KEY_UNFUNDED_TEST_ACCOUNT") || "",
-    loggedUserUnfundedSecretKey: Cypress.env("LOGGED_USER_SECRET_KEY_UNFUNDED_TEST_ACCOUNT") || "",
-    loggedUserFundedPublicKey: Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
-    loggedUserFundedSecretKey: Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
+    loggedUserUnfundedPublicKey:
+      Cypress.env("LOGGED_USER_PUBLIC_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+    loggedUserUnfundedSecretKey:
+      Cypress.env("LOGGED_USER_SECRET_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+    loggedUserFundedPublicKey:
+      Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
+    loggedUserFundedSecretKey:
+      Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
   };
 
   const login: (secretKey: string) => void = (secretKey) => {
@@ -58,21 +62,13 @@ describe("Dashboard", () => {
   });
 
   describe("Dashboard header", () => {
-    const abbreviatePublicKey: (key: string) => string = (
-      publicKey
-    ): string => {
-      return publicKey.slice(0, 5) + "..." + publicKey.slice(-2);
-    };
-
     it("Should have the wallet brand", () => {
       cy.visit("/dashboard");
       cy.get('[data-cy="header-brand"]').should("have.text", "My_Wallet");
     });
 
     it("Should display the correct abbreviated public key when user logs in with a secret key", () => {
-      const abbreviatedPublicKey: string = abbreviatePublicKey(
-        keys.unfundedPublicKey
-      );
+      const abbreviatedPublicKey: string = "GAS4V...AL";
       login(keys.loggedUserUnfundedSecretKey);
       cy.get('[data-cy="abbreviated-public-key"]').should(
         "have.text",
