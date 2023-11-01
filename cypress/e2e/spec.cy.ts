@@ -1,7 +1,7 @@
 import { generateKeys } from "../../app/helpers/generateKeys";
 
 describe("End-to-End testing", () => {
-  xdescribe("Home page", () => {
+  describe("Home page", () => {
     beforeEach(() => {
       cy.visit("/");
     });
@@ -49,7 +49,7 @@ describe("End-to-End testing", () => {
     });
   });
 
-  xdescribe("Login", () => {
+  describe("Login", () => {
     const secretKey: string = generateKeys().secret();
 
     beforeEach(() => {
@@ -75,11 +75,11 @@ describe("End-to-End testing", () => {
       cy.visit("/");
     });
 
-    xit("Should be rendered", () => {
+    it("Should be rendered", () => {
       cy.get('[data-cy="footer-container"]').should("exist");
     });
 
-    xit("Should have the proper background color", () => {
+    it("Should have the proper background color", () => {
       cy.get('[data-cy="footer-container"]').should(
         "have.css",
         "background-color",
@@ -87,7 +87,7 @@ describe("End-to-End testing", () => {
       );
     });
 
-    xit("Should have the proper text color", () => {
+    it("Should have the proper text color", () => {
       cy.get('[data-cy="footer-container"]').should(
         "have.css",
         "color",
@@ -95,7 +95,7 @@ describe("End-to-End testing", () => {
       );
     });
 
-    xit("Should display the informative links", () => {
+    it("Should display the informative links", () => {
       cy.get('[data-cy="terms-link"]').should("have.text", "Terms of Service");
       cy.get('[data-cy="privacy-link"]').should("have.text", "Privacy Policy");
       cy.get('[data-cy="repository-link"]').should("exist");
@@ -116,22 +116,22 @@ describe("End-to-End testing", () => {
         cy.visit("/");
       });
 
-      it("Terms of service link should open the terms of service page in a new tab", () => {
+      it("Should have a Terms of service link that opens the terms of service page in a new tab", () => {
         cy.get('[data-cy="terms-link"]')
           .should("have.attr", "target", "blank")
-          .should("have.attr", "href", links.TERMS_OF_SERVICE_LINK);
+          .should("have.attr", "href", links.termsLink);
       });
 
-      xit("Privacy policy link should open the the privacy policy page in a new tab", () => {
+      it("Should have a Privacy policy link that opens the the privacy policy page in a new tab", () => {
         cy.get('[data-cy="privacy-link"]')
           .should("have.attr", "target", "blank")
-          .should("have.attr", "href", links.PRIVACY_POLICY_LINK);
+          .should("have.attr", "href", links.privacyLink);
       });
 
-      xit("Repository link should should open the repository page in a new tab", () => {
+      it("Should have a Repository link that opens the repository page in a new tab", () => {
         cy.get('[data-cy="repository-link"]')
           .should("have.attr", "target", "blank")
-          .should("have.attr", "href", links.GITHUB_LINK);
+          .should("have.attr", "href", links.repositoryLink);
       });
     });
   });
