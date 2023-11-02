@@ -30,7 +30,7 @@ const Navbar: FC<{
   };
 
   return (
-    <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-cyan-950 mb-3">
+    <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-cyan-950 mb-3" data-cy="header-container">
       <div className="px-4 flex flex-wrap items-center justify-between w-full">
         <Brand />
         <UserKey
@@ -49,6 +49,7 @@ const Brand: FC = () => {
     <a
       className="text-xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
       href="#"
+      data-cy="header-brand"
     >
       My_Wallet
     </a>
@@ -68,10 +69,11 @@ const UserKey: FC<{
 
   return (
     <div className="flex">
-      <p className="text-sm font-bold mr-2">{abbreviatePublicKey(publicKey)}</p>
+      <p className="text-sm font-bold mr-2" data-cy="abbreviated-public-key">{abbreviatePublicKey(publicKey)}</p>
       <button
         className="text-sm underline underline-offset-2"
         onClick={() => handleCopyText(publicKey)}
+        data-cy="copy-button"
       >
         {linkText}
       </button>
@@ -88,6 +90,7 @@ const LogOutButton: FC<{ handleLogOut: () => void; isLogged: boolean }> = ({
       className="underline underline-offset-2"
       type="button"
       onClick={handleLogOut}
+      data-cy="log-out-button"
     >
       {isLogged ? "Sign out" : "Sign in"}
     </button>
