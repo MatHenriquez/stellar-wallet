@@ -5,13 +5,13 @@ describe("Dashboard", () => {
 
   const keys: KeyType = {
     loggedUserUnfundedPublicKey:
-      Cypress.env("LOGGED_USER_PUBLIC_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+      Cypress.env("UNFUNDED_SOURCE_ACCOUNT_PUBLIC_KEY") || "",
     loggedUserUnfundedSecretKey:
-      Cypress.env("LOGGED_USER_SECRET_KEY_UNFUNDED_TEST_ACCOUNT") || "",
+      Cypress.env("UNFUNDED_SOURCE_ACCOUNT_SECRET_KEY") || "",
     loggedUserFundedPublicKey:
-      Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
+      Cypress.env("FUNDED_SOURCE_ACCOUNT_PUBLIC_KEY") || "",
     loggedUserFundedSecretKey:
-      Cypress.env("LOGGED_USER_SECRET_KEY_FUNDED_TEST_ACCOUNT") || "",
+      Cypress.env("FUNDED_SOURCE_ACCOUNT_SECRET_KEY") || "",
   };
 
   const login: (secretKey: string) => void = (secretKey) => {
