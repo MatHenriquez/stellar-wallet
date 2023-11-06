@@ -63,8 +63,6 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
 }) => {
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
 
-  if (fee < +BASE_FEE) throw new Error(`Fee cannot be less than ${BASE_FEE}`);
-
   try {
     await loadAccount(destinationPublicKey);
     const sourceAccount = await loadAccount(sourceKeys.publicKey());
