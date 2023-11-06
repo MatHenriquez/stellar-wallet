@@ -112,8 +112,8 @@ const PaymentForm: FC<{
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
           type="text"
-          name="destinationPublicKey"
-          id="destinationPublicKey"
+          name="destination-public-key"
+          id="destination-public-key"
           onChange={handleInputChange}
           data-cy="destination-account-input"
         />
@@ -156,8 +156,8 @@ const PaymentForm: FC<{
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
           type="password"
-          name="signerKey"
-          id="signerKey"
+          name="signer-key"
+          id="signer-key"
           onChange={handleInputChange}
           data-cy="signer-account-input"
         />
