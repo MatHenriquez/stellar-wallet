@@ -406,7 +406,7 @@ describe("Dashboard", () => {
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="fee-error-message"]')
           .should("exist")
-          .should("have.text", "*Invalid fee");
+          .should("have.text", "*Invalid fee: must be greater than 100 stroops");
       });
 
       it("Should display the error message '*Invalid time out' when the user tries to send assets with an invalid time out", () => {
