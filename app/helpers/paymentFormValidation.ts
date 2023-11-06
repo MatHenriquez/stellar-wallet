@@ -2,11 +2,21 @@ import { IPaymentSummary } from "@component/interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
 import StellarSdk, { Keypair } from "stellar-sdk";
 
+const errorMessages = {
+  invalidSignerKey: "Invalid signer key",
+  invalidDestinationId: "Invalid destination id",
+  invalidAmount: "Invalid amount",
+  invalidFee: "Invalid fee",
+  invalidTimeOut: "Invalid time out",
+};
+
+const errors: IFormErrors = {};
+
 const isSignerKeyValid: (signerKey: string) => void = (signerKey) => {
   try {
     Keypair.fromSecret(signerKey);
   } catch (error) {
-    throw new Error("Invalid signer key");
+    errors.signerKeyError = errorMessages.invalidSignerKey;
   }
 };
 
@@ -16,7 +26,7 @@ const isDestinationIdValid: (destinationPublicKey: string) => void = (
   try {
     Keypair.fromPublicKey(destinationPublicKey);
   } catch (error) {
-    throw new Error("Invalid destination public key");
+    errors.destinationIdError = errorMessages.invalidDestinationId;
   }
 };
 
@@ -24,19 +34,27 @@ const isAmountInvalid: (
   amount: string,
   currentBalance: string | undefined,
   fee: number
-) => boolean = (amount = "0", currentBalance = "0", fee = 0) =>
-  +amount > +currentBalance - fee || +amount < StellarSdk.BASE_FEE;
+) => void = (amount = "0", currentBalance = "0", fee = 0) => {
+  +amount > +currentBalance - fee || +amount < StellarSdk.BASE_FEE
+    ? (errors.amountError = errorMessages.invalidAmount)
+    : null;
+};
 
 const isFeeInvalid: (
   fee: number,
   currentBalance: string | undefined
-) => boolean = (fee = 0, currentBalance = "0") => {
-  return fee > +currentBalance || fee < StellarSdk.BASE_FEE;
+) => void = (fee = 0, currentBalance = "0") => {
+  fee > +currentBalance || fee < StellarSdk.BASE_FEE
+    ? (errors.feeError = errorMessages.invalidFee)
+    : null;
 };
 
-const isTimeOutInvalid: (timeOutInSeconds: number) => boolean = (
+const isTimeOutInvalid: (timeOutInSeconds: number) => void = (
   timeOutInSeconds = -1
-) => timeOutInSeconds < 0;
+) =>
+  timeOutInSeconds < 0
+    ? (errors.timeOutError = errorMessages.invalidTimeOut)
+    : null;
 
 const isFormValid: (
   formEntries: IPaymentSummary,
@@ -44,25 +62,15 @@ const isFormValid: (
 ) => IFormErrors = (formEntries, currentBalance) => {
   const { signerKey, destinationPublicKey, amount, fee, timeOutInSeconds } =
     formEntries;
-  const errors: IFormErrors = {};
+
   try {
     isSignerKeyValid(signerKey);
     isDestinationIdValid(destinationPublicKey);
-    if (isAmountInvalid(amount, currentBalance, fee))
-      throw new Error("Invalid amount");
-    if (isFeeInvalid(fee, currentBalance)) throw new Error("Invalid fee");
-    if (isTimeOutInvalid(timeOutInSeconds)) throw new Error("Invalid time out");
-  } catch (error: any) {
-    if (error.message === "Invalid signer key")
-      errors.signerKeyError = "Invalid signer key";
-    else if (error.message === "Invalid destination public key")
-      errors.destinationIdError = "Invalid destination id";
-    else if (error.message === "Invalid amount")
-      errors.amountError = "Invalid amount";
-    else if (error.message === "Invalid fee") errors.feeError = "Invalid fee";
-    else if (error.message === "Invalid time out")
-      errors.timeOutError = "Invalid time out";
-    else throw new Error(error);
+    isAmountInvalid(amount, currentBalance, fee);
+    isFeeInvalid(fee, currentBalance);
+    isTimeOutInvalid(timeOutInSeconds);
+  } catch (error) {
+    throw error;
   }
 
   return errors;
