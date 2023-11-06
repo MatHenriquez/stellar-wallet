@@ -1,6 +1,6 @@
 import { IPaymentSummary } from "@component/interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
-import StellarSdk, { Keypair } from "stellar-sdk";
+import { BASE_FEE, Keypair } from "stellar-sdk";
 
 const errorMessages = {
   invalidSignerKey: "Invalid signer key",
@@ -35,7 +35,7 @@ const isAmountInvalid: (
   currentBalance: string | undefined,
   fee: number
 ) => void = (amount = "0", currentBalance = "0", fee = 0) => {
-  +amount > +currentBalance - fee || +amount < StellarSdk.BASE_FEE
+  +amount > +currentBalance - fee || +amount < +BASE_FEE
     ? (errors.amountError = errorMessages.invalidAmount)
     : null;
 };
@@ -44,7 +44,7 @@ const isFeeInvalid: (
   fee: number,
   currentBalance: string | undefined
 ) => void = (fee = 0, currentBalance = "0") => {
-  fee > +currentBalance || fee < StellarSdk.BASE_FEE
+  fee > +currentBalance || fee < +BASE_FEE
     ? (errors.feeError = errorMessages.invalidFee)
     : null;
 };

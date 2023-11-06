@@ -1,8 +1,8 @@
-import StellarSdk, { Server, Keypair, Transaction } from "stellar-sdk";
+import { Server, Keypair, Transaction, NotFoundError, Asset, Memo, Networks, Operation, TransactionBuilder, BASE_FEE } from "stellar-sdk";
 import { IPaymentSummary } from "../interfaces/payments";
 
 function handleError(error: Error) {
-  if (error instanceof StellarSdk.NotFoundError) {
+  if (error instanceof NotFoundError) {
     throw new Error("The destination account does not exist!");
   } else return error;
 }
@@ -25,10 +25,10 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
   timeOutInSeconds,
   fee,
 }) => {
-  const sourceKeys: Keypair = StellarSdk.Keypair.fromSecret(signerKey);
+  const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
   let transaction: Transaction;
 
-  if (fee < StellarSdk.BASE_FEE)
+  if (fee < +BASE_FEE)
     throw new Error("Fee cannot be less than base fee");
 
   loadAccount(destinationPublicKey)
@@ -37,18 +37,18 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
       return loadAccount(sourceKeys.publicKey());
     })
     .then(function (sourceAccount) {
-      transaction = new StellarSdk.TransactionBuilder(sourceAccount, {
-        fee: fee,
-        networkPassphrase: StellarSdk.Networks.TESTNET,
+      transaction = new TransactionBuilder(sourceAccount, {
+        fee: fee.toString(),
+        networkPassphrase: Networks.TESTNET,
       })
         .addOperation(
-          StellarSdk.Operation.payment({
+          Operation.payment({
             destination: destinationPublicKey,
-            asset: StellarSdk.Asset.native(),
+            asset: Asset.native(),
             amount: amount,
           })
         )
-        .addMemo(StellarSdk.Memo.text(memo))
+        .addMemo(Memo.text(memo))
         .setTimeout(timeOutInSeconds)
         .build();
       signTransaction(transaction, sourceKeys);
