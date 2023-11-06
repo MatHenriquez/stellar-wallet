@@ -172,16 +172,36 @@ const PaymentForm: FC<{
   );
 };
 
-const FormErrors: FC<{ formError: IFormErrors }> = ({ formError }) => {
+const FormErrors: FC<{ formError: IFormErrors }> = ({
+  formError: {
+    amountError,
+    destinationIdError,
+    feeError,
+    timeOutError,
+    signerKeyError,
+  },
+}) => {
   return (
     <div className="text-red-500 font-bold">
-      {formError.amountError ? <p data-cy="amount-error-message">*{formError.amountError}</p> : null}
-      {formError.destinationIdError ? (
-        <p data-cy="destination-account-error-message">*{formError.destinationIdError}</p>
+      {amountError ? (
+        <p data-cy="amount-error-message">*{amountError}</p>
       ) : null}
-      {formError.feeError ? <p data-cy="fee-error-message">*{formError.feeError}</p> : null}
-      {formError.timeOutError ? <p data-cy="time-out-error-message">*{formError.timeOutError}</p> : null}
-      {formError.signerKeyError ? <p data-cy="signer-account-error-message">*{formError.signerKeyError}</p> : null}
+      {destinationIdError ? (
+        <p data-cy="destination-account-error-message">
+          *{destinationIdError}
+        </p>
+      ) : null}
+      {feeError ? (
+        <p data-cy="fee-error-message">*{feeError}</p>
+      ) : null}
+      {timeOutError ? (
+        <p data-cy="time-out-error-message">*{timeOutError}</p>
+      ) : null}
+      {signerKeyError ? (
+        <p data-cy="signer-account-error-message">
+          *{signerKeyError}
+        </p>
+      ) : null}
     </div>
   );
 };
