@@ -1,4 +1,15 @@
-import { Server, Keypair, Transaction, NotFoundError, Asset, Memo, Networks, Operation, TransactionBuilder, BASE_FEE } from "stellar-sdk";
+import {
+  Server,
+  Keypair,
+  Transaction,
+  NotFoundError,
+  Asset,
+  Memo,
+  Networks,
+  Operation,
+  TransactionBuilder,
+  BASE_FEE,
+} from "stellar-sdk";
 import { IPaymentSummary } from "../interfaces/payments";
 
 function handleError(error: Error) {
@@ -28,8 +39,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
   let transaction: Transaction;
 
-  if (fee < +BASE_FEE)
-    throw new Error("Fee cannot be less than base fee");
+  if (fee < +BASE_FEE) throw new Error("Fee cannot be less than base fee");
 
   loadAccount(destinationPublicKey)
     .catch((error: Error) => handleError(error))
