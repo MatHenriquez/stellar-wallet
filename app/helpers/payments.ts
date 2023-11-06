@@ -1,5 +1,5 @@
 import StellarSdk, { Server, Keypair, Transaction } from "stellar-sdk";
-import { IPaymentData } from "../interfaces/payments";
+import { IPaymentSummary } from "../interfaces/payments";
 
 function handleError(error: Error) {
   if (error instanceof StellarSdk.NotFoundError) {
@@ -17,7 +17,7 @@ const submitTransaction = (transaction: Transaction) =>
 
 const loadAccount = async (publicKey: string) => server.loadAccount(publicKey);
 
-export const sendPayment: (paymentData: IPaymentData) => void = ({
+export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
   signerKey,
   destinationPublicKey,
   amount,

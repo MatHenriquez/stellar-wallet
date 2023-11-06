@@ -1,4 +1,4 @@
-import { IPaymentData } from "@component/interfaces/payments";
+import { IPaymentSummary } from "@component/interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
 import StellarSdk, { Keypair } from "stellar-sdk";
 
@@ -38,15 +38,15 @@ const isTimeOutInvalid: (timeOutInSeconds: number) => boolean = (
   timeOutInSeconds = -1
 ) => timeOutInSeconds < 0;
 
-const isFormDataValid: (
-  formData: IPaymentData,
+const isFormValid: (
+  formEntries: IPaymentSummary,
   currentBalance: string | undefined
-) => IFormErrors = (formData, currentBalance) => {
+) => IFormErrors = (formEntries, currentBalance) => {
   const { signerKey, destinationPublicKey, amount, fee, timeOutInSeconds } =
-    formData;
+    formEntries;
   const errors: IFormErrors = {};
-
   try {
+    console.log("formEntries", formEntries)
     isSignerKeyValid(signerKey);
     isDestinationIdValid(destinationPublicKey);
     if (isAmountInvalid(amount, currentBalance, fee))
@@ -70,5 +70,5 @@ const isFormDataValid: (
 };
 
 export default {
-  isFormDataValid,
+  isFormValid,
 };

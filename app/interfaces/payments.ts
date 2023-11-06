@@ -1,4 +1,4 @@
-export interface IPaymentData {
+export interface IPaymentSummary {
   signerKey: string;
   destinationPublicKey: string;
   amount: string;

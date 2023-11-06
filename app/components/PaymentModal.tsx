@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { IPaymentData } from "../interfaces/payments";
+import { IPaymentSummary } from "../interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
 import PaymentResponseAlert from "./PaymentResponseAlert";
 
@@ -9,7 +9,7 @@ const PaymentModal: FC<{
   handleSendPayment: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   formError: IFormErrors;
-  setPaymentData: (value: IPaymentData) => void;
+  setPaymentSummary: (value: IPaymentSummary) => void;
   setFormError: (value: IFormErrors) => void;
   paymentResponse: string;
   color: string;
@@ -19,14 +19,14 @@ const PaymentModal: FC<{
   handleSendPayment,
   handleInputChange,
   formError,
-  setPaymentData,
+  setPaymentSummary,
   setFormError,
   paymentResponse,
   color,
 }) => {
   const handleResetModal = () => {
     setShowPaymentModal(false);
-    setPaymentData({} as IPaymentData);
+    setPaymentSummary({} as IPaymentSummary);
     setFormError({} as IFormErrors);
   };
 
@@ -104,7 +104,7 @@ const PaymentForm: FC<{
           data-cy="amount-input"
         />
         <label
-          htmlFor="destinationPublicKey"
+          htmlFor="destination-public-key"
           data-cy="destination-account-label"
         >
           Destination
@@ -112,7 +112,7 @@ const PaymentForm: FC<{
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
           type="text"
-          name="destination-public-key"
+          name="destinationPublicKey"
           id="destination-public-key"
           onChange={handleInputChange}
           data-cy="destination-account-input"
@@ -128,14 +128,14 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="fee-input"
         />
-        <label htmlFor="timeOutInSeconds" data-cy="time-out-label">
+        <label htmlFor="time-out-in-seconds" data-cy="time-out-label">
           Timeout
         </label>
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
           type="text"
           name="timeOutInSeconds"
-          id="timeOutInSeconds"
+          id="time-out-in-seconds"
           onChange={handleInputChange}
           data-cy="time-out-input"
         />
@@ -150,13 +150,13 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="memo-input"
         />
-        <label htmlFor="signerKey" data-cy="signer-account-label">
+        <label htmlFor="signer-key" data-cy="signer-account-label">
           Signer
         </label>
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
           type="password"
-          name="signer-key"
+          name="signerKey"
           id="signer-key"
           onChange={handleInputChange}
           data-cy="signer-account-input"

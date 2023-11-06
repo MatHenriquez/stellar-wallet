@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import Navbar from "../components/Header";
 import accountHelper from "../helpers/account";
 import Footer from "../components/Footer";
-import { IPaymentData } from "../interfaces/payments";
+import { IPaymentSummary } from "../interfaces/payments";
 import { sendPayment } from "../helpers/payments";
 import PaymentModal from "../components/PaymentModal";
 import { IFormErrors } from "../interfaces/errors";
@@ -14,7 +14,7 @@ const Dashboard: FC = () => {
   const [publicKey, setPublicKey] = useState("" as string);
   const [isLogged, setIsLogged] = useState(true);
   const [balance, setBalance] = useState("" as string | undefined);
-  const [paymentData, setPaymentData] = useState({} as IPaymentData);
+  const [paymentSummary, setPaymentSummary] = useState({} as IPaymentSummary);
   const [paymentResponse, setPaymentResponse] = useState("" as string);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentAlert, setShowPaymentAlert] = useState(false);
@@ -35,20 +35,20 @@ const Dashboard: FC = () => {
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const formErrors = paymentFormValidation.isFormDataValid(
-        paymentData,
+      const formErrors = paymentFormValidation.isFormValid(
+        paymentSummary,
         balance
       );
       setFormError(formErrors);
       if (Object.keys(formErrors).length > 0)
         throw new Error("Invalid form data");
-      await sendPayment(paymentData);
+      await sendPayment(paymentSummary);
       setShowPaymentModal(false);
       getAccountBalance(publicKey);
       setPaymentResponse("Successful payment");
       setShowPaymentAlert(true);
       setAlertColor("green");
-      setPaymentData({} as IPaymentData);
+      setPaymentSummary({} as IPaymentSummary);
     } catch (error) {
       setAlertColor("red");
       setPaymentResponse("Payment Failed");
@@ -58,7 +58,7 @@ const Dashboard: FC = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setPaymentData({ ...paymentData, [name]: value });
+    setPaymentSummary({ ...paymentSummary, [name]: value });
   };
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const Dashboard: FC = () => {
           isLogged={isLogged}
           setIsLogged={setIsLogged}
         />
-        <BalanceData
+        <Balance
           balance={balance}
           setShowPaymentModal={setShowPaymentModal}
           isFunded={isFunded}
@@ -95,7 +95,7 @@ const Dashboard: FC = () => {
           handleSendPayment={handleSendPayment}
           handleInputChange={handleInputChange}
           formError={formError}
-          setPaymentData={setPaymentData}
+          setPaymentSummary={setPaymentSummary}
           setFormError={setFormError}
           paymentResponse={paymentResponse}
           color={alertColor}
@@ -106,7 +106,7 @@ const Dashboard: FC = () => {
   );
 };
 
-const BalanceData: FC<{
+const Balance: FC<{
   balance: string | undefined;
   setShowPaymentModal: (value: boolean) => void;
   isFunded: boolean;
