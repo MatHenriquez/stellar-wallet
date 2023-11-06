@@ -46,7 +46,6 @@ const isFormValid: (
     formEntries;
   const errors: IFormErrors = {};
   try {
-    console.log("formEntries", formEntries)
     isSignerKeyValid(signerKey);
     isDestinationIdValid(destinationPublicKey);
     if (isAmountInvalid(amount, currentBalance, fee))
