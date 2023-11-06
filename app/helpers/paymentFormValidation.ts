@@ -1,6 +1,6 @@
 import { IPaymentSummary } from "@component/interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
-import { BASE_FEE, Keypair } from "stellar-sdk";
+import { BASE_FEE, Keypair, StrKey } from "stellar-sdk";
 
 const errorMessages = {
   invalidSignerKey: "Invalid signer key",
@@ -13,21 +13,15 @@ const errorMessages = {
 const errors: IFormErrors = {};
 
 const isSignerKeyValid: (signerKey: string) => void = (signerKey) => {
-  try {
-    Keypair.fromSecret(signerKey);
-  } catch (error) {
+  if (!StrKey.isValidEd25519SecretSeed(signerKey))
     errors.signerKeyError = errorMessages.invalidSignerKey;
-  }
 };
 
 const isDestinationIdValid: (destinationPublicKey: string) => void = (
   destinationPublicKey
 ) => {
-  try {
-    Keypair.fromPublicKey(destinationPublicKey);
-  } catch (error) {
+  if (!StrKey.isValidEd25519PublicKey(destinationPublicKey))
     errors.destinationIdError = errorMessages.invalidDestinationId;
-  }
 };
 
 const isAmountInvalid: (
@@ -63,15 +57,11 @@ const isFormValid: (
   const { signerKey, destinationPublicKey, amount, fee, timeOutInSeconds } =
     formEntries;
 
-  try {
-    isSignerKeyValid(signerKey);
-    isDestinationIdValid(destinationPublicKey);
-    isAmountInvalid(amount, currentBalance, fee);
-    isFeeInvalid(fee, currentBalance);
-    isTimeOutInvalid(timeOutInSeconds);
-  } catch (error) {
-    throw error;
-  }
+  isSignerKeyValid(signerKey);
+  isDestinationIdValid(destinationPublicKey);
+  isAmountInvalid(amount, currentBalance, fee);
+  isFeeInvalid(fee, currentBalance);
+  isTimeOutInvalid(timeOutInSeconds);
 
   return errors;
 };
