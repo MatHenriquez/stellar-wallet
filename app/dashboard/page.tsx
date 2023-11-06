@@ -32,16 +32,20 @@ const Dashboard: FC = () => {
     }
   };
 
+  const validatePaymentForm = () => {
+    const formErrors = paymentFormValidation.isFormValid(
+      paymentSummary,
+      balance
+    );
+    setFormError(formErrors);
+    if (Object.keys(formErrors).length > 0)
+      throw new Error("Invalid form data");
+  };
+
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const formErrors = paymentFormValidation.isFormValid(
-        paymentSummary,
-        balance
-      );
-      setFormError(formErrors);
-      if (Object.keys(formErrors).length > 0)
-        throw new Error("Invalid form data");
+      validatePaymentForm();
       await sendPayment(paymentSummary);
       setShowPaymentModal(false);
       getAccountBalance(publicKey);
