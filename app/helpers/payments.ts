@@ -39,7 +39,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
   let transaction: Transaction;
 
-  if (fee < +BASE_FEE) throw new Error("Fee cannot be less than base fee");
+  if (fee < +BASE_FEE) throw new Error(`Fee cannot be less than ${BASE_FEE}`);
 
   loadAccount(destinationPublicKey)
     .catch((error: Error) => handleError(error))
@@ -64,7 +64,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = ({
       signTransaction(transaction, sourceKeys);
       return submitTransaction(transaction);
     })
-    .then(function (result: any) {
+    .then(function () {
       return {
         sourcePublicKey: sourceKeys.publicKey(),
         destinationPublicKey: destinationPublicKey,

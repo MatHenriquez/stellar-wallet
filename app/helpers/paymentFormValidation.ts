@@ -6,7 +6,7 @@ const errorMessages = {
   invalidSignerKey: "Invalid signer key",
   invalidDestinationId: "Invalid destination id",
   invalidAmount: "Invalid amount",
-  invalidFee: "Invalid fee",
+  invalidFee: `Invalid fee: must be greater than ${BASE_FEE} stroops`,
   invalidTimeOut: "Invalid time out",
 };
 
