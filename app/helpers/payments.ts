@@ -59,6 +59,6 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
       status: "Success",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
