@@ -1,12 +1,11 @@
 import { IPaymentSummary } from "@component/interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
-import { BASE_FEE, Keypair, StrKey } from "stellar-sdk";
+import { BASE_FEE, StrKey } from "stellar-sdk";
 
 const errorMessages = {
   invalidSignerKey: "Invalid signer key",
   invalidDestinationId: "Invalid destination id",
   invalidAmount: "Invalid amount",
-  invalidFee: `Invalid fee: must be greater than ${BASE_FEE} stroops`,
   invalidTimeOut: "Invalid time out",
 };
 
@@ -26,20 +25,10 @@ const isDestinationIdValid: (destinationPublicKey: string) => void = (
 
 const isAmountInvalid: (
   amount: string,
-  currentBalance: string | undefined,
-  fee: number
-) => void = (amount = "0", currentBalance = "0", fee = 0) => {
-  +amount > +currentBalance - fee || +amount < +BASE_FEE
-    ? (errors.amountError = errorMessages.invalidAmount)
-    : null;
-};
-
-const isFeeInvalid: (
-  fee: number,
   currentBalance: string | undefined
-) => void = (fee = 0, currentBalance = "0") => {
-  fee > +currentBalance || fee < +BASE_FEE
-    ? (errors.feeError = errorMessages.invalidFee)
+) => void = (amount = "0", currentBalance = "0") => {
+  +amount > +currentBalance - +BASE_FEE || +amount < +BASE_FEE
+    ? (errors.amountError = errorMessages.invalidAmount)
     : null;
 };
 
@@ -54,13 +43,12 @@ const isFormValid: (
   formEntries: IPaymentSummary,
   currentBalance: string | undefined
 ) => IFormErrors = (formEntries, currentBalance) => {
-  const { signerKey, destinationPublicKey, amount, fee, timeOutInSeconds } =
+  const { signerKey, destinationPublicKey, amount, timeOutInSeconds } =
     formEntries;
 
   isSignerKeyValid(signerKey);
   isDestinationIdValid(destinationPublicKey);
-  isAmountInvalid(amount, currentBalance, fee);
-  isFeeInvalid(fee, currentBalance);
+  isAmountInvalid(amount, currentBalance);
   isTimeOutInvalid(timeOutInSeconds);
 
   return errors;
