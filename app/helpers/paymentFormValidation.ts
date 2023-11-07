@@ -32,12 +32,11 @@ const isAmountInvalid: (
     : null;
 };
 
-const isTimeOutInvalid: (timeOutInSeconds: number) => void = (
-  timeOutInSeconds = -1
-) =>
-  timeOutInSeconds < 0
-    ? (errors.timeOutError = errorMessages.invalidTimeOut)
-    : null;
+const isTimeOutInvalid = (timeOutInSeconds: number) => {
+  if (!timeOutInSeconds || timeOutInSeconds < 0) {
+    errors.timeOutError = errorMessages.invalidTimeOut;
+  }
+};
 
 const isFormValid: (
   formEntries: IPaymentSummary,
