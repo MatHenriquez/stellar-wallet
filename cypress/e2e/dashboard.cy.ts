@@ -284,13 +284,6 @@ describe("Dashboard", () => {
           .should("have.text", "Memo");
       });
 
-      it("Should have a time out input field with the 'Timeout' label", () => {
-        cy.get('[data-cy="time-out-input"]').should("exist");
-        cy.get('[data-cy="time-out-label"]')
-          .should("exist")
-          .should("have.text", "Timeout");
-      });
-
       it("Should have a 'Send Lumens' title", () => {
         cy.get('[data-cy="send-payment-modal-title"]')
           .should("exist")
@@ -306,8 +299,6 @@ describe("Dashboard", () => {
         unvalidDestinationPublicKey,
         validAmount,
         unvalidAmount,
-        validTimeOut,
-        unvalidTimeOut,
       } = {
         validSignerKey: keys.loggedUserFundedSecretKey,
         unvalidSignerKey: "invalid",
@@ -317,8 +308,6 @@ describe("Dashboard", () => {
         unvalidDestinationPublicKey: "invalid",
         validAmount: "110",
         unvalidAmount: "0",
-        validTimeOut: 30,
-        unvalidTimeOut: -1,
       };
 
       it("Should display the error message '*Invalid destination id' when the user tries to send assets to an invalid destination account", () => {
@@ -330,7 +319,6 @@ describe("Dashboard", () => {
           unvalidDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(validAmount);
-        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
         cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="destination-account-error-message"]')
@@ -347,7 +335,6 @@ describe("Dashboard", () => {
           validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(validAmount);
-        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
         cy.get('[data-cy="signer-account-input"]').type(unvalidSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="signer-account-error-message"]')
@@ -364,29 +351,11 @@ describe("Dashboard", () => {
           validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(unvalidAmount);
-        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
         cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="amount-error-message"]')
           .should("exist")
           .should("have.text", "*Invalid amount");
-      });
-
-      it("Should display the error message '*Invalid time out' when the user tries to send assets with an invalid time out", () => {
-        login(keys.loggedUserFundedSecretKey);
-        cy.get('[data-cy="send-payment-button"]')
-          .should("exist")
-          .trigger("click");
-        cy.get('[data-cy="destination-account-input"]').type(
-          validDestinationPublicKey
-        );
-        cy.get('[data-cy="amount-input"]').type(validAmount);
-        cy.get('[data-cy="time-out-input"]').type(unvalidTimeOut.toString());
-        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
-        cy.get('[data-cy="send-payment-modal-button"]').click();
-        cy.get('[data-cy="time-out-error-message"]')
-          .should("exist")
-          .should("have.text", "*Invalid time out");
       });
 
       it("Should display the error message 'Payment Failed' when the transaction fails", () => {
@@ -398,7 +367,6 @@ describe("Dashboard", () => {
           validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type("1000000000000000");
-        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
         cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="payment-response-alert"]')
@@ -415,7 +383,6 @@ describe("Dashboard", () => {
           validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(validAmount);
-        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
         cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="send-payment-button"]')
