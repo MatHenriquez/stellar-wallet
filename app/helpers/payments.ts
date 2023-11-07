@@ -25,10 +25,10 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
   signerKey,
   destinationPublicKey,
   amount,
-  memo,
-  timeOutInSeconds,
+  memo
 }) => {
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
+  const timeOutInSeconds: number = 60;
 
   try {
     await loadAccount(destinationPublicKey);
