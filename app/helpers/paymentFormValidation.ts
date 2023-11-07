@@ -5,8 +5,7 @@ import { BASE_FEE, StrKey } from "stellar-sdk";
 const errorMessages = {
   invalidSignerKey: "Invalid signer key",
   invalidDestinationPublicKey: "Invalid destination id",
-  invalidAmount: "Invalid amount",
-  invalidTimeOut: "Invalid time out",
+  invalidAmount: "Invalid amount"
 };
 
 const errors: IFormErrors = {};
@@ -32,23 +31,16 @@ const isAmountInvalid: (
     : null;
 };
 
-const isTimeOutInvalid = (timeOutInSeconds: number) => {
-  if (!timeOutInSeconds || timeOutInSeconds < 0) {
-    errors.timeOutError = errorMessages.invalidTimeOut;
-  }
-};
-
 const isFormValid: (
   formEntries: IPaymentSummary,
   currentBalance: string | undefined
 ) => IFormErrors = (formEntries, currentBalance) => {
-  const { signerKey, destinationPublicKey, amount, timeOutInSeconds } =
+  const { signerKey, destinationPublicKey, amount} =
     formEntries;
 
   isSignerKeyValid(signerKey);
   isDestinationPublicKeyValid(destinationPublicKey);
   isAmountInvalid(amount, currentBalance);
-  isTimeOutInvalid(timeOutInSeconds);
 
   return errors;
 };
