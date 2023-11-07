@@ -117,17 +117,6 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="destination-account-input"
         />
-        <label htmlFor="time-out-in-seconds" data-cy="time-out-label">
-          Timeout
-        </label>
-        <input
-          className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
-          type="text"
-          name="timeOutInSeconds"
-          id="time-out-in-seconds"
-          onChange={handleInputChange}
-          data-cy="time-out-input"
-        />
         <label htmlFor="memo" data-cy="memo-label">
           Memo
         </label>
@@ -162,7 +151,7 @@ const PaymentForm: FC<{
 };
 
 const FormErrors: FC<{ formError: IFormErrors }> = ({
-  formError: { amountError, destinationPublicKeyError, timeOutError, signerKeyError },
+  formError: { amountError, destinationPublicKeyError, signerKeyError },
 }) => {
   return (
     <div className="text-red-500 font-bold">
@@ -171,9 +160,6 @@ const FormErrors: FC<{ formError: IFormErrors }> = ({
       ) : null}
       {destinationPublicKeyError ? (
         <p data-cy="destination-account-error-message">*{destinationPublicKeyError}</p>
-      ) : null}
-      {timeOutError ? (
-        <p data-cy="time-out-error-message">*{timeOutError}</p>
       ) : null}
       {signerKeyError ? (
         <p data-cy="signer-account-error-message">*{signerKeyError}</p>
