@@ -52,7 +52,7 @@ describe("Dashboard", () => {
     login(keys.loggedUserFundedSecretKey);
     cy.get('[data-cy="balance-value"]').should(
       "have.text",
-      "18173.0000000 Lumens (XLM)"
+      "18172.9998900 Lumens (XLM)"
     );
   });
 
@@ -284,13 +284,6 @@ describe("Dashboard", () => {
           .should("have.text", "Memo");
       });
 
-      it("Should have a fee input field with the 'Fee' label", () => {
-        cy.get('[data-cy="fee-input"]').should("exist");
-        cy.get('[data-cy="fee-label"]')
-          .should("exist")
-          .should("have.text", "Fee");
-      });
-
       it("Should have a time out input field with the 'Timeout' label", () => {
         cy.get('[data-cy="time-out-input"]').should("exist");
         cy.get('[data-cy="time-out-label"]')
@@ -317,8 +310,6 @@ describe("Dashboard", () => {
         unvalidAmount: "0",
         validTimeOut: 30,
         unvalidTimeOut: -1,
-        validFee: 100,
-        unvalidFee: 0,
       };
 
       it("Should display the error message '*Invalid destination id' when the user tries to send assets to an invalid destination account", () => {
@@ -330,7 +321,6 @@ describe("Dashboard", () => {
           testingPaymentData.unvalidDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.validTimeOut.toString()
         );
@@ -352,7 +342,6 @@ describe("Dashboard", () => {
           testingPaymentData.validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.validTimeOut.toString()
         );
@@ -373,8 +362,9 @@ describe("Dashboard", () => {
         cy.get('[data-cy="destination-account-input"]').type(
           testingPaymentData.validDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.unvalidAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
+        cy.get('[data-cy="amount-input"]').type(
+          testingPaymentData.unvalidAmount
+        );
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.validTimeOut.toString()
         );
@@ -387,28 +377,6 @@ describe("Dashboard", () => {
           .should("have.text", "*Invalid amount");
       });
 
-      it("Should display the error message '*Invalid fee' when the user tries to send assets with an invalid fee", () => {
-        login(keys.loggedUserFundedSecretKey);
-        cy.get('[data-cy="send-payment-button"]')
-          .should("exist")
-          .trigger("click");
-        cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
-        );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.unvalidFee.toString());
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
-        cy.get('[data-cy="send-payment-modal-button"]').click();
-        cy.get('[data-cy="fee-error-message"]')
-          .should("exist")
-          .should("have.text", "*Invalid fee: must be greater than 100 stroops");
-      });
-
       it("Should display the error message '*Invalid time out' when the user tries to send assets with an invalid time out", () => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="send-payment-button"]')
@@ -418,7 +386,6 @@ describe("Dashboard", () => {
           testingPaymentData.validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.unvalidTimeOut.toString()
         );
@@ -440,7 +407,6 @@ describe("Dashboard", () => {
           testingPaymentData.validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type("1000000000000000");
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.validTimeOut.toString()
         );
@@ -462,7 +428,6 @@ describe("Dashboard", () => {
           testingPaymentData.validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="fee-input"]').type(testingPaymentData.validFee.toString());
         cy.get('[data-cy="time-out-input"]').type(
           testingPaymentData.validTimeOut.toString()
         );
