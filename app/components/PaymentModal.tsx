@@ -162,15 +162,15 @@ const PaymentForm: FC<{
 };
 
 const FormErrors: FC<{ formError: IFormErrors }> = ({
-  formError: { amountError, destinationIdError, timeOutError, signerKeyError },
+  formError: { amountError, destinationPublicKeyError, timeOutError, signerKeyError },
 }) => {
   return (
     <div className="text-red-500 font-bold">
       {amountError ? (
         <p data-cy="amount-error-message">*{amountError}</p>
       ) : null}
-      {destinationIdError ? (
-        <p data-cy="destination-account-error-message">*{destinationIdError}</p>
+      {destinationPublicKeyError ? (
+        <p data-cy="destination-account-error-message">*{destinationPublicKeyError}</p>
       ) : null}
       {timeOutError ? (
         <p data-cy="time-out-error-message">*{timeOutError}</p>
