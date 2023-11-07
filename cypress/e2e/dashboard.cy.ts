@@ -299,7 +299,16 @@ describe("Dashboard", () => {
     });
 
     describe("Send assets funcionality", () => {
-      const testingPaymentData = {
+      const {
+        validSignerKey,
+        unvalidSignerKey,
+        validDestinationPublicKey,
+        unvalidDestinationPublicKey,
+        validAmount,
+        unvalidAmount,
+        validTimeOut,
+        unvalidTimeOut,
+      } = {
         validSignerKey: keys.loggedUserFundedSecretKey,
         unvalidSignerKey: "invalid",
         validDestinationPublicKey: Cypress.env(
@@ -318,15 +327,11 @@ describe("Dashboard", () => {
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.unvalidDestinationPublicKey
+          unvalidDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="destination-account-error-message"]')
           .should("exist")
@@ -339,15 +344,11 @@ describe("Dashboard", () => {
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
+          validDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.unvalidSignerKey
-        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(unvalidSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="signer-account-error-message"]')
           .should("exist")
@@ -360,17 +361,11 @@ describe("Dashboard", () => {
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
+          validDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(
-          testingPaymentData.unvalidAmount
-        );
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
+        cy.get('[data-cy="amount-input"]').type(unvalidAmount);
+        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="amount-error-message"]')
           .should("exist")
@@ -383,15 +378,11 @@ describe("Dashboard", () => {
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
+          validDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.unvalidTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="time-out-input"]').type(unvalidTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="time-out-error-message"]')
           .should("exist")
@@ -404,15 +395,11 @@ describe("Dashboard", () => {
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
+          validDestinationPublicKey
         );
         cy.get('[data-cy="amount-input"]').type("1000000000000000");
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
+        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="payment-response-alert"]')
           .should("exist")
@@ -420,20 +407,16 @@ describe("Dashboard", () => {
       });
 
       it("Should show the message 'Successful payment' when the transaction is successful", () => {
-        login(testingPaymentData.validSignerKey);
+        login(validSignerKey);
         cy.get('[data-cy="send-payment-button"]')
           .should("exist")
           .trigger("click");
         cy.get('[data-cy="destination-account-input"]').type(
-          testingPaymentData.validDestinationPublicKey
+          validDestinationPublicKey
         );
-        cy.get('[data-cy="amount-input"]').type(testingPaymentData.validAmount);
-        cy.get('[data-cy="time-out-input"]').type(
-          testingPaymentData.validTimeOut.toString()
-        );
-        cy.get('[data-cy="signer-account-input"]').type(
-          testingPaymentData.validSignerKey
-        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="time-out-input"]').type(validTimeOut.toString());
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
         cy.get('[data-cy="send-payment-modal-button"]').click();
         cy.get('[data-cy="send-payment-button"]')
           .should("exist")
