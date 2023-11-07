@@ -7,6 +7,7 @@ import {
   Networks,
   Operation,
   TransactionBuilder,
+  BASE_FEE,
 } from "stellar-sdk";
 import { IPaymentSummary } from "../interfaces/payments";
 
@@ -25,8 +26,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
   destinationPublicKey,
   amount,
   memo,
-  timeOutInSeconds,
-  fee,
+  timeOutInSeconds
 }) => {
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
 
@@ -35,7 +35,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
     const sourceAccount = await loadAccount(sourceKeys.publicKey());
 
     const transaction = new TransactionBuilder(sourceAccount, {
-      fee: fee.toString(),
+      fee: BASE_FEE,
       networkPassphrase: Networks.TESTNET,
     })
       .addOperation(
