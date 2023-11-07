@@ -26,7 +26,7 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
   destinationPublicKey,
   amount,
   memo,
-  timeOutInSeconds
+  timeOutInSeconds,
 }) => {
   const sourceKeys: Keypair = Keypair.fromSecret(signerKey);
 
@@ -51,13 +51,6 @@ export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
 
     signTransaction(transaction, sourceKeys);
     await submitTransaction(transaction);
-
-    return {
-      sourcePublicKey: sourceKeys.publicKey(),
-      destinationPublicKey: destinationPublicKey,
-      amount: amount,
-      status: "Success",
-    };
   } catch (error) {
     console.error(error);
   }
