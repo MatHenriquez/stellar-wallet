@@ -38,14 +38,12 @@ const Dashboard: FC = () => {
       balance
     );
     setFormError(formErrors);
-    if (Object.keys(formErrors).length > 0)
-      throw new Error("Invalid form data");
+    return !(Object.keys(formErrors).length > 0);
   };
 
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      validatePaymentForm();
+    if (validatePaymentForm()) {
       await sendPayment(paymentSummary);
       setShowPaymentModal(false);
       getAccountBalance(publicKey);
@@ -53,10 +51,10 @@ const Dashboard: FC = () => {
       setShowPaymentAlert(true);
       setAlertColor("green");
       setPaymentSummary({} as IPaymentSummary);
-    } catch (error) {
+    } else {
       setAlertColor("red");
-      setPaymentResponse("Payment Failed");
       setShowPaymentAlert(true);
+      setPaymentResponse("Payment Failed");
     }
   };
 
