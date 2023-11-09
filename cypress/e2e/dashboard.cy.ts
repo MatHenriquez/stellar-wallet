@@ -394,4 +394,136 @@ describe("Dashboard", () => {
       });
     });
   });
+
+  describe("Payments history", () => {
+    const {
+      sourceAccountPublicKey = Cypress.env("SOURCE_ACCOUNT_PUBLIC_KEY") || "",
+      destinationAccountPublicKey = Cypress.env(
+        "DESTINATION_ACCOUNT_PUBLIC_KEY"
+      ) || "",
+      successfulPaymentHash = Cypress.env("SUCCESSFUL_PAYMENT_HASH") || "",
+    } = {
+      sourceAccountPublicKey: Cypress.env("SOURCE_ACCOUNT_PUBLIC_KEY") || "",
+      destinationAccountPublicKey:
+        Cypress.env("DESTINATION_ACCOUNT_PUBLIC_KEY") || "",
+      successfulPaymentHash: Cypress.env("SUCCESSFUL_PAYMENT_HASH") || "",
+    };
+
+    it("Should have a 'Payments history' title", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payments-history-title"]')
+        .should("exist")
+        .should("have.text", "Payments History");
+    });
+
+    it("Should show the payments history container when the user logs in with a funded account", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payments-history-container"]').should("exist");
+    });
+
+    it("Should not show the payments history container when the user logs in with an unfunded account", () => {
+      login(keys.loggedUserUnfundedSecretKey);
+      cy.get('[data-cy="payments-history-container"]').should("not.exist");
+    });
+
+    it("Should show a text with the message 'No payments yet' when the account and has no payments history", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="no-payments-message"]')
+        .should("exist")
+        .should("have.text", "There are no payments to show");
+    });
+
+    it("Should show payments with the correct title", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-title-1"]')
+        .should("exist")
+        .should("have.text", "PAYMENT");
+    });
+
+    it("Should show payments with the correct source account", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="page-number-12"]').should("exist").click();
+      cy.get('[data-cy="source-account-payment-0"]')
+        .should("exist")
+        .should(
+          "have.text",
+          `From: ${sourceAccountPublicKey}`
+        );
+    });
+
+    it("Should show payments with the correct destination account", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="destination-account-payment-1"]')
+        .should("exist")
+        .should(
+          "have.text",
+          `To: ${destinationAccountPublicKey}`
+        );
+    });
+
+    it("Should show payments with the correct amount", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="amount-payment-1"]')
+        .should("exist")
+        .should("have.text", "Amount: 500.0000000 XML");
+    });
+
+    it("Should show payments with the correct date", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-date-1"]')
+        .should("exist")
+        .should("have.text", "Date: 2023-11-07");
+    });
+
+    it("Should show payments with the correct time", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-time-1"]')
+        .should("exist")
+        .should("have.text", "Time: 14:21");
+    });
+
+    it("Should show payments with the correct Hash", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-hash-1"]')
+        .should("exist")
+        .should(
+          "have.text",
+          `Hash: ${successfulPaymentHash}`
+        );
+    });
+
+    it("Should show the correct status", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-status-1"]')
+        .should("exist")
+        .should("have.text", "Status: Success");
+    });
+
+    it("Should show the correct number of payments per page", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="payment-title-4"]').should("exist");
+    });
+
+    describe("Pagination", () => {
+      it("Should exist", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="pagination"]').should("exist");
+      });
+
+      it("Should have the correct number of pages", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="page-number-12"]')
+          .should("exist")
+          .should("have.text", "12");
+      });
+
+      it("Should display the correct page when the user clicks on a page number", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="page-number-12"]').should("exist").click();
+        cy.get('[data-cy="payment-title-1"]')
+          .should("exist")
+          .should("have.text", "CREATE_ACCOUNT");
+      });
+    });
+  });
 });
