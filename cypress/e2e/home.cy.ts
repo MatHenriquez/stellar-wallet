@@ -135,4 +135,25 @@ describe("End-to-End testing", () => {
       });
     });
   });
+
+  describe("Albedo login button", () => {
+    it("Should exist with text 'Connect with Albedo'", () => {
+      cy.visit("/");
+      cy.get('[data-cy="albedo-login-button"]')
+        .should("exist")
+        .should("have.text", "Connect with Albedo");
+    });
+
+    it("Should open the Albedo login page", () => {
+      cy.visit("/");
+      cy.window().then((win) => {
+        cy.stub(win, "open").as("open");
+      });
+      cy.get('[data-cy="albedo-login-button"]').trigger("click");
+      cy.get("@open").should(
+        "have.been.calledOnceWith",
+        "https://albedo.link/confirm"
+      );
+    });
+  });
 });
