@@ -52,7 +52,7 @@ describe("Dashboard", () => {
     login(keys.loggedUserFundedSecretKey);
     cy.get('[data-cy="balance-value"]').should(
       "have.text",
-      "10000.0000000 Lumens (XLM)"
+      "18172.9998900 Lumens (XLM)"
     );
   });
 
@@ -195,6 +195,202 @@ describe("Dashboard", () => {
         cy.get('[data-cy="repository-link"]')
           .should("have.attr", "target", "blank")
           .should("have.attr", "href", links.repositoryLink);
+      });
+    });
+  });
+
+  describe("Send assets", () => {
+    describe("Send assets button", () => {
+      it("Should have a send assets button with the text 'Send'", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .should("have.text", "Send");
+      });
+
+      it("Should have a disabled send assets button when the user logs in with an unfunded account", () => {
+        login(keys.loggedUserUnfundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .should("be.disabled");
+      });
+
+      it("Should have an enabled send assets button when the user logs in with a funded account", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .should("not.be.disabled");
+      });
+    });
+
+    describe("Payment modal", () => {
+      beforeEach(() => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+      });
+
+      it("Should display the payment modal when the user clicks on the send assets button", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="payment-modal"]').should("exist");
+      });
+
+      it("Should have a close button with the text 'Close'", () => {
+        cy.get('[data-cy="close-payment-modal-button"]')
+          .should("exist")
+          .should("have.text", "Close");
+      });
+
+      it("Should be unmounted when the user clicks on the close button", () => {
+        cy.get('[data-cy="close-payment-modal-button"]').trigger("click");
+        cy.get('[data-cy="payment-modal"]').should("not.exist");
+      });
+
+      it("Should have a send button with the text 'Send'", () => {
+        cy.get('[data-cy="send-payment-modal-button"]')
+          .should("exist")
+          .should("have.value", "Send");
+      });
+
+      it("Should have a source account input field with the 'Signer' label", () => {
+        cy.get('[data-cy="signer-account-input"]').should("exist");
+        cy.get('[data-cy="signer-account-label"]')
+          .should("exist")
+          .should("have.text", "Signer");
+      });
+
+      it("Should have a destination account input field with the 'Destination' label", () => {
+        cy.get('[data-cy="destination-account-input"]').should("exist");
+        cy.get('[data-cy="destination-account-label"]')
+          .should("exist")
+          .should("have.text", "Destination");
+      });
+
+      it("Should have an amount input field with the 'Amount' label", () => {
+        cy.get('[data-cy="amount-input"]').should("exist");
+        cy.get('[data-cy="amount-label"]')
+          .should("exist")
+          .should("have.text", "Amount");
+      });
+
+      it("Should have a memo input field with the 'Memo' label", () => {
+        cy.get('[data-cy="memo-input"]').should("exist");
+        cy.get('[data-cy="memo-label"]')
+          .should("exist")
+          .should("have.text", "Memo");
+      });
+
+      it("Should have a 'Send Lumens' title", () => {
+        cy.get('[data-cy="send-payment-modal-title"]')
+          .should("exist")
+          .should("have.text", "Send Lumens");
+      });
+    });
+
+    describe("Send assets funcionality", () => {
+      const {
+        validSignerKey,
+        unvalidSignerKey,
+        validDestinationPublicKey,
+        unvalidDestinationPublicKey,
+        validAmount,
+        unvalidAmount,
+      } = {
+        validSignerKey: keys.loggedUserFundedSecretKey,
+        unvalidSignerKey: "invalid",
+        validDestinationPublicKey: Cypress.env(
+          "UNFUNDED_DESTINATION_PUBLIC_KEY" || ""
+        ),
+        unvalidDestinationPublicKey: "invalid",
+        validAmount: "110",
+        unvalidAmount: "0",
+      };
+
+      it("Should display the error message '*Invalid destination id' when the user tries to send assets to an invalid destination account", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="destination-account-input"]').type(
+          unvalidDestinationPublicKey
+        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
+        cy.get('[data-cy="send-payment-modal-button"]').click();
+        cy.get('[data-cy="destination-account-error-message"]')
+          .should("exist")
+          .should("have.text", "*Invalid destination id");
+      });
+
+      it("Should display the error message '*Invalid signer key' when the user tries to send assets with an invalid signer key", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="destination-account-input"]').type(
+          validDestinationPublicKey
+        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="signer-account-input"]').type(unvalidSignerKey);
+        cy.get('[data-cy="send-payment-modal-button"]').click();
+        cy.get('[data-cy="signer-account-error-message"]')
+          .should("exist")
+          .should("have.text", "*Invalid signer key");
+      });
+
+      it("Should display the error message '*Invalid amount' when the user tries to send assets with an invalid amount", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="destination-account-input"]').type(
+          validDestinationPublicKey
+        );
+        cy.get('[data-cy="amount-input"]').type(unvalidAmount);
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
+        cy.get('[data-cy="send-payment-modal-button"]').click();
+        cy.get('[data-cy="amount-error-message"]')
+          .should("exist")
+          .should("have.text", "*Invalid amount");
+      });
+
+      it("Should display the error message 'Payment Failed' when the transaction fails", () => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="destination-account-input"]').type(
+          validDestinationPublicKey
+        );
+        cy.get('[data-cy="amount-input"]').type("1000000000000000");
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
+        cy.get('[data-cy="send-payment-modal-button"]').click();
+        cy.get('[data-cy="payment-response-alert"]')
+          .should("exist")
+          .should("have.text", "Payment Failed");
+      });
+
+      it("Should show the message 'Successful payment' when the transaction is successful", () => {
+        login(validSignerKey);
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="destination-account-input"]').type(
+          validDestinationPublicKey
+        );
+        cy.get('[data-cy="amount-input"]').type(validAmount);
+        cy.get('[data-cy="signer-account-input"]').type(validSignerKey);
+        cy.get('[data-cy="send-payment-modal-button"]').click();
+        cy.get('[data-cy="send-payment-button"]')
+          .should("exist")
+          .trigger("click");
+        cy.get('[data-cy="payment-response-alert"]')
+          .should("exist")
+          .should("have.text", "Successful payment");
       });
     });
   });
