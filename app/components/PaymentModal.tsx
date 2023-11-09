@@ -13,6 +13,7 @@ const PaymentModal: FC<{
   setFormError: (value: IFormErrors) => void;
   paymentResponse: string;
   color: string;
+  isFunded: boolean;
 }> = ({
   showPaymentModal,
   setShowPaymentModal,
@@ -23,6 +24,7 @@ const PaymentModal: FC<{
   setFormError,
   paymentResponse,
   color,
+  isFunded
 }) => {
   const handleResetModal = () => {
     setShowPaymentModal(false);
@@ -50,6 +52,7 @@ const PaymentModal: FC<{
                   <button
                     className="p-1 ml-auto bg-transparent border-0 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={handleResetModal}
+                    disabled={!isFunded}
                   >
                     <span className="h-6 w-6 text-2xl">×</span>
                   </button>
