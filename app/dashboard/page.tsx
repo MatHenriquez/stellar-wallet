@@ -3,14 +3,19 @@ import React, { FC, useEffect, useState } from "react";
 import Navbar from "../components/Header";
 import accountHelper from "../helpers/account";
 import Footer from "../components/Footer";
-import { IPaymentSummary } from "../interfaces/payments";
+import { IPaymentSummary, IPaymentHistory } from "../interfaces/payments";
 import { sendPayment } from "../helpers/payments";
 import PaymentModal from "../components/PaymentModal";
 import { IFormErrors } from "../interfaces/errors";
 import paymentFormValidation from "../helpers/paymentFormValidation";
+import getPaymentsHistory, {
+  paginatePaymentsHistory,
+} from "../helpers/paymentsHistory";
+import HistoricalPayments from "../components/HistoricalPayments";
+import Pagination from "@component/components/Pagination";
 
 const Dashboard: FC = () => {
-  const [isFunded, setIsFunded] = useState(true);
+  const [isFunded, setIsFunded] = useState(false);
   const [publicKey, setPublicKey] = useState("" as string);
   const [isLogged, setIsLogged] = useState(true);
   const [balance, setBalance] = useState("" as string | undefined);
@@ -20,6 +25,15 @@ const Dashboard: FC = () => {
   const [showPaymentAlert, setShowPaymentAlert] = useState(false);
   const [formError, setFormError] = useState({} as IFormErrors);
   const [alertColor, setAlertColor] = useState("" as string);
+  const [paymentsHistory, setPaymentsHistory] = useState(
+    [] as IPaymentHistory[]
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paymentsPerPage, setPaymentsPerPage] = useState(5);
+  const [displayedPayments, setDisplayedPayments] = useState(
+    [] as IPaymentHistory[]
+  );
+  const [numberOfPages, setNumberOfPages] = useState(0 as number);
 
   const getAccountBalance = async (publicKey: string) => {
     try {
@@ -64,16 +78,24 @@ const Dashboard: FC = () => {
   };
 
   useEffect(() => {
-    if (window.localStorage) {
-      const storedPublicKey: string | null =
-        window.localStorage.getItem("publicKey");
-      if (storedPublicKey) {
-        setPublicKey(storedPublicKey);
-        setIsLogged(true);
-        getAccountBalance(storedPublicKey);
-      }
+    const storedPublicKey: string | null =
+      window.localStorage.getItem("publicKey");
+    if (storedPublicKey) {
+      setPublicKey(storedPublicKey);
+      setIsLogged(true);
+      getAccountBalance(storedPublicKey);
+      getPaymentsHistory(storedPublicKey).then((paymentsHistory: IPaymentHistory[]) => {
+        setPaymentsHistory(paymentsHistory);
+      });
     }
   }, []);
+
+  useEffect(() => {
+    setDisplayedPayments(
+      paginatePaymentsHistory(paymentsHistory, currentPage, paymentsPerPage)
+    );
+    setNumberOfPages(Math.ceil(paymentsHistory.length / paymentsPerPage));
+  }, [paymentsHistory, currentPage, paymentsPerPage]);
 
   return (
     <>
@@ -101,7 +123,32 @@ const Dashboard: FC = () => {
           setFormError={setFormError}
           paymentResponse={paymentResponse}
           color={alertColor}
+          isFunded={isFunded}
         />
+                <div>
+          <div className="flex flex-col">
+            <h1 className="text-3xl mt-6 p-4" data-cy="payments-history-title">
+              Payments History
+            </h1>
+            <Pagination
+              numberOfPages={numberOfPages}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+            />
+          </div>
+          {displayedPayments.length === 0 && (
+            <p className="ml-8" data-cy="no-payments-message">
+              There are no payments to show
+            </p>
+          )}
+          {displayedPayments.map((paymentHistory, index) => (
+            <HistoricalPayments
+              key={index}
+              index={index}
+              historicalPayment={paymentHistory}
+            />
+          ))}
+        </div>
       </div>
       <Footer />
     </>
@@ -120,7 +167,7 @@ const Balance: FC<{
       </h1>
       <div className="flex">
         <p className="text-4xl font-bold mt-8 p-2" data-cy="balance-value">
-          {balance} Lumens (XLM)
+          {balance || 0} Lumens (XLM)
         </p>
         <SendPaymentButton
           setShowPaymentModal={setShowPaymentModal}
