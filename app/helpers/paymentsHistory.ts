@@ -21,17 +21,17 @@ const formatPaymentsHistory: (
   const formattedPaymentsHistory: IPaymentHistory[] = [];
 
   unformattedPaymentsHistory.records.forEach(
-    (payment: ServerApi.OperationRecord) => {
+    ({amount, created_at, asset_type, from, to, transaction_hash, transaction_successful, type}: ServerApi.OperationRecord) => {
       formattedPaymentsHistory.push({
-        amount: payment.amount,
-        date: payment.created_at.slice(0, 10),
-        time: payment.created_at.slice(11, 16),
-        assetType: payment.asset_type,
-        sourceAccount: payment.from,
-        destinationAccount: payment.to,
-        transactionHash: payment.transaction_hash,
-        successful: payment.transaction_successful,
-        type: payment.type,
+        amount: amount,
+        date: created_at.slice(0, 10),
+        time: created_at.slice(11, 16),
+        assetType: asset_type,
+        sourceAccount: from,
+        destinationAccount: to,
+        transactionHash: transaction_hash,
+        successful: transaction_successful,
+        type: type,
       });
     }
   );
