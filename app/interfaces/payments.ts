@@ -7,10 +7,14 @@ export interface IPaymentSummary {
   fee: number;
 }
 
-export interface IPaymentResponse {
-  sourcePublicKey: string;
-  destinationPublicKey: string;
+export interface IPaymentHistory {
   amount: string;
-  status: string;
-  erroeMessage?: string;
+  date: string;
+  time: string;
+  assetType: string;
+  sourceAccount: string;
+  destinationAccount: string;
+  transactionHash: string;
+  successful: boolean;
+  type: string;
 }
