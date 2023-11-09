@@ -8,12 +8,14 @@ import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
 import loginHelper from "./helpers/login";
 import Footer from "./components/Footer";
+import loginWithAlbedo from "./helpers/albedo";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginKey, setLoginKey] = useState("" as string);
   const [errorMessage, setErrorMessage] = useState("" as string);
+  const [albedoError, setAlbedoError] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -43,6 +45,16 @@ const Index: FC = () => {
     }
   }
 
+  async function handleAlbedoLogin() {
+    const albedoResponse = await loginWithAlbedo();
+    if (albedoResponse) {
+      loginHelper.savePublicKey(albedoResponse.pubkey);
+      loginHelper.redirectToDashboard();
+    } else {
+      setAlbedoError(true);
+    }
+  }
+
   return (
     <>
       <div
@@ -61,6 +73,18 @@ const Index: FC = () => {
             </div>
           </div>
         </nav>
+
+        <div className="grid place-items-center">
+          <a
+            className="bg-slate-900 text-white active:bg-slate-600 font-bold px-16 py-5 rounded shadow-md hover:shadow-xl outline-none focus:outline-none ease-linear transition-all duration-150 text-xl mt-4"
+            onClick={handleAlbedoLogin}
+            data-cy="albedo-login-button"
+          >
+            Connect with Albedo
+          </a>
+
+          {albedoError ? <AlbedoError setAlbedoError={setAlbedoError} /> : null}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 place-items-center row-span-5">
           <div className="relative mb-12 px-3 lg:mb-0">
@@ -100,6 +124,22 @@ const Index: FC = () => {
       </div>
       <Footer />
     </>
+  );
+};
+
+const AlbedoError: FC<{ setAlbedoError: (value: boolean) => void }> = ({
+  setAlbedoError,
+}) => {
+  return (
+    <div className="flex flex-row bg-red-100 border border-red-400 text-red-700 rounded mt-4">
+      <strong className="font-bold px-4 py-3">Error!</strong>
+      <button
+        className="ml-2 mb-4 bg-red-700 px-1 text-white"
+        onClick={() => setAlbedoError(false)}
+      >
+        X
+      </button>
+    </div>
   );
 };
 
