@@ -1,23 +1,32 @@
 "use client";
-
 import { FC, useState, useEffect } from "react";
 import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import LoginModal from "./components/LoginModal";
-import loginHelper from "./helpers/login";
+import {
+  savePublicKey,
+  redirectToDashboard,
+  getPublicKey,
+} from "./helpers/login";
 import Footer from "./components/Footer";
-import loginWithAlbedo from "./helpers/albedo";
+import WalletFactory from "./helpers/WalletFactory";
+import IWallet from "./interfaces/wallet";
+import WalletLoginButton from "./components/wallet/WalletLoginButton";
 
 const Index: FC = () => {
   const [keys, setKeys] = useState({} as IKeyPair);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginKey, setLoginKey] = useState("" as string);
-  const [errorMessage, setErrorMessage] = useState("" as string);
-  const [albedoError, setAlbedoError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [displayError, setDisplayError] = useState(false);
+  const [loginError, setLoginError] = useState("" as string);
+  const [wallets, setWallets] = useState([] as IWallet[]);
 
   useEffect(() => {
+    const wallets = WalletFactory.createAll();
+    setWallets(wallets);
     const init = async () => {
       const { Modal, Ripple, initTE } = await import("tw-elements");
       initTE({ Modal, Ripple });
@@ -35,23 +44,25 @@ const Index: FC = () => {
     setKeys(generatedKeys);
   }
 
-  function handleLogin(secretKey: string): void {
+  function handleLoginWithSecretKey(secretKey: string): void {
     try {
-      const publickKey: string = loginHelper.getPublicKey(secretKey);
-      loginHelper.savePublicKey(publickKey);
-      loginHelper.redirectToDashboard();
+      const publickKey: string = getPublicKey(secretKey);
+      savePublicKey(publickKey);
+      redirectToDashboard();
     } catch (error) {
       setErrorMessage("Invalid secret key");
     }
   }
 
-  async function handleAlbedoLogin() {
-    const albedoResponse = await loginWithAlbedo();
-    if (albedoResponse) {
-      loginHelper.savePublicKey(albedoResponse.pubkey);
-      loginHelper.redirectToDashboard();
-    } else {
-      setAlbedoError(true);
+  async function handleLogin(wallet: IWallet) {
+    try {
+      const publicKey = await wallet.getPublicKey();
+      savePublicKey(publicKey);
+      redirectToDashboard();
+    } catch (error) {
+      console.error(error);
+      setDisplayError(true);
+      setLoginError("Unable to log in");
     }
   }
 
@@ -74,16 +85,20 @@ const Index: FC = () => {
           </div>
         </nav>
 
-        <div className="grid place-items-center">
-          <a
-            className="bg-slate-900 text-white active:bg-slate-600 font-bold px-16 py-5 rounded shadow-md hover:shadow-xl outline-none focus:outline-none ease-linear transition-all duration-150 text-xl mt-4"
-            onClick={handleAlbedoLogin}
-            data-cy="albedo-login-button"
-          >
-            Connect with Albedo
-          </a>
-
-          {albedoError ? <AlbedoError setAlbedoError={setAlbedoError} /> : null}
+        <div className="grid place-items-center hover:cursor-pointer">
+          {displayError ? (
+            <LoginError
+              setDisplayError={setDisplayError}
+              loginError={loginError}
+            />
+          ) : null}
+          {wallets.map((wallet, index) => (
+            <WalletLoginButton
+              wallet={wallet}
+              handleLogin={handleLogin}
+              key={index}
+            />
+          ))}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 place-items-center row-span-5">
@@ -113,7 +128,7 @@ const Index: FC = () => {
             <LoginModal
               showModal={showLoginModal}
               setShowModal={setShowLoginModal}
-              login={handleLogin}
+              login={handleLoginWithSecretKey}
               secretKey={loginKey}
               setSecretKey={setLoginKey}
               errorMessage={errorMessage}
@@ -127,15 +142,16 @@ const Index: FC = () => {
   );
 };
 
-const AlbedoError: FC<{ setAlbedoError: (value: boolean) => void }> = ({
-  setAlbedoError,
-}) => {
+const LoginError: FC<{
+  setDisplayError: (value: boolean) => void;
+  loginError: string;
+}> = ({ setDisplayError, loginError }) => {
   return (
     <div className="flex flex-row bg-red-100 border border-red-400 text-red-700 rounded mt-4">
-      <strong className="font-bold px-4 py-3">Error!</strong>
+      <strong className="font-bold px-4 py-3">{loginError}</strong>
       <button
         className="ml-2 mb-4 bg-red-700 px-1 text-white"
-        onClick={() => setAlbedoError(false)}
+        onClick={() => setDisplayError(false)}
       >
         X
       </button>
