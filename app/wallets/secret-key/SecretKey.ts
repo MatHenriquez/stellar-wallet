@@ -8,17 +8,15 @@ export default class SecretKey extends AbstractWallet implements IWallet {
   public static NAME = "secretKey";
   public static FRIENDLY_NAME = "Secret key";
 
-  public override async getPublicKey(secretKey: string): Promise<string> {
+  public override async getPublicKey(secretKey: string) {
     const requestPublicKey = Keypair.fromSecret(secretKey);
     this.storage.storeItem("publicKey", requestPublicKey.publicKey());
-    this.storage.storeItem("secretKey", requestPublicKey.secret());
     super.persistWallet();
     return requestPublicKey.publicKey();
   }
 
-  public override async sign(tx: Transaction) {
-    const secretKey = this.storage.getItem("secretKey");
-    const keyPair = Keypair.fromSecret(secretKey as string);
+  public override async sign(tx: Transaction, secretKey: string) {
+    const keyPair = Keypair.fromSecret(secretKey);
     tx.sign(keyPair);
     return tx.toXDR();
   }

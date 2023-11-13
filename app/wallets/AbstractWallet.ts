@@ -14,13 +14,13 @@ export default abstract class AbstractWallet implements IWallet {
 
   public getFriendlyName(): string {
     throw new NotImplementedError();
-}
+  }
 
   public getPublicKey(_privateKey?: string): Promise<string> {
     throw new NotImplementedError();
   }
 
-  public sign(_tx: Transaction): Promise<string> {
+  public sign(_tx: Transaction, _privateKey?: string): Promise<string> {
     throw new NotImplementedError();
   }
 
