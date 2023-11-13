@@ -4,7 +4,7 @@ import { FC } from "react";
 import IWallet from "../interfaces/wallet";
 import NotImplementedError from "./errors/NotImplementedMethod";
 
-export default abstract class AsbtractWallet implements IWallet {
+export default abstract class AbstractWallet implements IWallet {
   protected readonly WALLET_STORAGE_KEY = "wallet";
   constructor(protected storage: ILocalStorage) {}
 
@@ -13,7 +13,7 @@ export default abstract class AsbtractWallet implements IWallet {
   }
 
   public getFriendlyName(): string {
-    throw new NotImplementedError();;
+    throw new NotImplementedError();
 }
 
   public getPublicKey(_privateKey?: string): Promise<string> {
