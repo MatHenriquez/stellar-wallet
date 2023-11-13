@@ -6,8 +6,7 @@ import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
 import {
   savePublicKey,
-  redirectToDashboard,
-  getPublicKey,
+  redirectToDashboard
 } from "./helpers/login";
 import Footer from "./components/Footer";
 import WalletFactory from "./helpers/WalletFactory";
