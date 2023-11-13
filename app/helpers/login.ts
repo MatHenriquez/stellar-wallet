@@ -16,7 +16,7 @@ const savePublicKey = (publicKey: string): void => {
   localStorage.setItem("publicKey", publicKey);
 };
 
-export default {
+export {
   getPublicKey,
   redirectToDashboard,
   savePublicKey,
