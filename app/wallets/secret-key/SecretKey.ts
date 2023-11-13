@@ -34,8 +34,4 @@ export default class SecretKey extends AbstractWallet implements IWallet {
   public override getSvgIcon(): typeof SecretKeyIcon {
     return SecretKeyIcon;
   }
-
-  public override getExtension(): string {
-    return "";
-  }
 }
