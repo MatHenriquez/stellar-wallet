@@ -12,6 +12,7 @@
     "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@albedo-link/intent": "^0.12.0",
     "@babel/preset-env": "^7.23.2",
     "@types/node": "20.8.8",
     "@types/react": "18.2.31",
