@@ -7,5 +7,5 @@ export default interface IWallet {
   getName(): string;
   getFriendlyName(): string;
   getExtension(): string;
-  getSvgIcon(): FC;
+  getIconComponent(): FC;
 }

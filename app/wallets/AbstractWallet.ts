@@ -28,7 +28,7 @@ export default abstract class AbstractWallet implements IWallet {
     throw new NotImplementedError();
   }
 
-  public getSvgIcon(): FC {
+  public getIconComponent(): FC {
     throw new NotImplementedError();
   }
 

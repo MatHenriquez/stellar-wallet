@@ -29,7 +29,7 @@ export default class SecretKey extends AbstractWallet implements IWallet {
     return SecretKey.FRIENDLY_NAME;
   }
 
-  public override getSvgIcon(): typeof SecretKeyIcon {
+  public override getIconComponent(): typeof SecretKeyIcon {
     return SecretKeyIcon;
   }
 }

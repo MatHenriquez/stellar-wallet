@@ -6,7 +6,7 @@ const WalletLoginButton: FC<{
   handleLogin: (wallet: IWallet) => Promise<void>;
 }> = ({ wallet, handleLogin }) => {
   const walletName = wallet.getFriendlyName();
-  const Icon = wallet.getSvgIcon();
+  const Icon = wallet.getIconComponent();
 
   return (
     <a
