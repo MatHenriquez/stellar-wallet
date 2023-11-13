@@ -4,10 +4,7 @@ import { generateKeys } from "./helpers/generateKeys";
 import { Keypair } from "stellar-sdk";
 import { IKeyPair } from "./interfaces/keys";
 import InfoModal from "./components/InfoModal";
-import {
-  savePublicKey,
-  redirectToDashboard
-} from "./helpers/login";
+import { savePublicKey, redirectToDashboard } from "./helpers/login";
 import Footer from "./components/Footer";
 import WalletFactory from "./helpers/WalletFactory";
 import IWallet from "./interfaces/wallet";
@@ -86,6 +83,7 @@ const Index: FC = () => {
               placeholder="Paste your secret key"
               className="w-96 bg-cyan-700 text-white"
               onChange={handleInputChange}
+              data-cy="secret-key-input"
             />
           </div>
 
@@ -122,10 +120,13 @@ const LoginError: FC<{
 }> = ({ setDisplayError, loginError }) => {
   return (
     <div className="flex flex-row bg-red-100 border border-red-400 text-red-700 rounded mt-4">
-      <strong className="font-bold px-4 py-3">{loginError}</strong>
+      <strong className="font-bold px-4 py-3" data-cy="login-error-message">
+        {loginError}
+      </strong>
       <button
         className="ml-2 mb-4 bg-red-700 px-1 text-white"
         onClick={() => setDisplayError(false)}
+        data-cy="error-message-close-button"
       >
         X
       </button>
