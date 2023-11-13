@@ -13,6 +13,7 @@ import getPaymentsHistory, {
 } from "../helpers/paymentsHistory";
 import HistoricalPayments from "../components/HistoricalPayments";
 import Pagination from "@component/components/Pagination";
+import ReceivePayment from "@component/components/ReceivePayment";
 
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(false);
@@ -34,6 +35,7 @@ const Dashboard: FC = () => {
     [] as IPaymentHistory[]
   );
   const [numberOfPages, setNumberOfPages] = useState(0 as number);
+  const [showQr, setShowQr] = useState(false);
 
   const getAccountBalance = async (publicKey: string) => {
     try {
@@ -84,9 +86,11 @@ const Dashboard: FC = () => {
       setPublicKey(storedPublicKey);
       setIsLogged(true);
       getAccountBalance(storedPublicKey);
-      getPaymentsHistory(storedPublicKey).then((paymentsHistory: IPaymentHistory[]) => {
-        setPaymentsHistory(paymentsHistory);
-      });
+      getPaymentsHistory(storedPublicKey).then(
+        (paymentsHistory: IPaymentHistory[]) => {
+          setPaymentsHistory(paymentsHistory);
+        }
+      );
     }
   }, []);
 
@@ -109,6 +113,9 @@ const Dashboard: FC = () => {
           balance={balance}
           setShowPaymentModal={setShowPaymentModal}
           isFunded={isFunded}
+          setShowQr={setShowQr}
+          showQr={showQr}
+          publicKey={publicKey}
         />
         <KeyView publicKey={publicKey} />
         <UnfundedMessage isFunded={isFunded} />
@@ -125,7 +132,7 @@ const Dashboard: FC = () => {
           color={alertColor}
           isFunded={isFunded}
         />
-                <div>
+        <div>
           <div className="flex flex-col">
             <h1 className="text-3xl mt-6 p-4" data-cy="payments-history-title">
               Payments History
@@ -159,20 +166,37 @@ const Balance: FC<{
   balance: string | undefined;
   setShowPaymentModal: (value: boolean) => void;
   isFunded: boolean;
-}> = ({ balance, setShowPaymentModal, isFunded }) => {
+  showQr: boolean;
+  setShowQr: (value: boolean) => void;
+  publicKey: string;
+}> = ({
+  balance,
+  setShowPaymentModal,
+  isFunded,
+  showQr,
+  setShowQr,
+  publicKey,
+}) => {
   return (
     <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
       <h1 className="text-3xl mt-6" data-cy="balance-title">
         Your Balance
       </h1>
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         <p className="text-4xl font-bold mt-8 p-2" data-cy="balance-value">
           {balance || 0} Lumens (XLM)
         </p>
-        <SendPaymentButton
-          setShowPaymentModal={setShowPaymentModal}
-          isFunded={isFunded}
-        />
+        <div className="flex">
+          <SendPaymentButton
+            setShowPaymentModal={setShowPaymentModal}
+            isFunded={isFunded}
+          />
+          <ReceivePayment
+            destinationPublicKey={publicKey}
+            setShowQr={setShowQr}
+            showQr={showQr}
+          />
+        </div>
       </div>
     </div>
   );
