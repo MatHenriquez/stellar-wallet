@@ -28,7 +28,6 @@ const Index: FC = () => {
   }, []);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    console.log(e.target.value);
     setLoginKey(e.target.value);
   }
 
