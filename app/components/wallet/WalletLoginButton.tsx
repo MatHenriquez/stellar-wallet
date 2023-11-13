@@ -10,9 +10,9 @@ const WalletLoginButton: FC<{
 
   return (
     <a
-      className="flex items-center space-around bg-slate-900 text-white active:bg-slate-600 font-bold px-14 py-5 rounded shadow-md hover:shadow-xl outline-none focus:outline-none ease-linear transition-all duration-150 text-xl mt-4"
+      className="flex items-center bg-slate-900 text-white active:bg-slate-600 font-bold rounded shadow-md hover:shadow-xl outline-none focus:outline-none ease-linear transition-all duration-150 text-xl mt-9 justify-center w-96 h-20 hover:cursor-pointer"
       onClick={() => handleLogin(wallet)}
-      data-cy="albedo-login-button"
+      data-cy={`${wallet.getName()}-login-button`}
     >
       <Icon />
       <span className="ml-4">Connect with {walletName}</span>
