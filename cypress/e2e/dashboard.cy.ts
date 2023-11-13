@@ -21,44 +21,46 @@ describe("Dashboard", () => {
     cy.get("#signin-button").click();
   };
 
-  it("Should render the header", () => {
-    cy.visit("/dashboard");
-    cy.get('[data-cy="header-container"]').should("exist");
-  });
+  describe("Dashboard body", () => {
+    it("Should render the header", () => {
+      cy.visit("/dashboard");
+      cy.get('[data-cy="header-container"]').should("exist");
+    });
 
-  it("Should render the footer", () => {
-    cy.visit("/dashboard");
-    cy.get('[data-cy="footer-container"]').should("exist");
-  });
+    it("Should render the footer", () => {
+      cy.visit("/dashboard");
+      cy.get('[data-cy="footer-container"]').should("exist");
+    });
 
-  it("Should have the balance and public key titles", () => {
-    cy.visit("/dashboard");
-    cy.get('[data-cy="balance-title"]').should("have.text", "Your Balance");
-    cy.get('[data-cy="public-key-title"]').should(
-      "have.text",
-      "Your Stellar Public Key"
-    );
-  });
+    it("Should have the balance and public key titles", () => {
+      cy.visit("/dashboard");
+      cy.get('[data-cy="balance-title"]').should("have.text", "Your Balance");
+      cy.get('[data-cy="public-key-title"]').should(
+        "have.text",
+        "Your Stellar Public Key"
+      );
+    });
 
-  it("Should show the correct public key when user logs in with a secret key", () => {
-    login(keys.loggedUserUnfundedSecretKey);
-    cy.get('[data-cy="public-key-value"]').should(
-      "have.text",
-      keys.loggedUserUnfundedPublicKey
-    );
-  });
+    it("Should show the correct public key when user logs in with a secret key", () => {
+      login(keys.loggedUserUnfundedSecretKey);
+      cy.get('[data-cy="public-key-value"]').should(
+        "have.text",
+        keys.loggedUserUnfundedPublicKey
+      );
+    });
 
-  it("Should show the correct balance for a funded account", () => {
-    login(keys.loggedUserFundedSecretKey);
-    cy.get('[data-cy="balance-value"]').should(
-      "have.text",
-      "18172.9998900 Lumens (XLM)"
-    );
-  });
+    it("Should show the correct balance for a funded account", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="balance-value"]').should(
+        "have.text",
+        "18172.9998900 Lumens (XLM)"
+      );
+    });
 
-  it("Should show the correct balance for an unfunded account", () => {
-    login(keys.loggedUserUnfundedSecretKey);
-    cy.get('[data-cy="balance-value"]').should("have.text", "0 Lumens (XLM)");
+    it("Should show the correct balance for an unfunded account", () => {
+      login(keys.loggedUserUnfundedSecretKey);
+      cy.get('[data-cy="balance-value"]').should("have.text", "0 Lumens (XLM)");
+    });
   });
 
   describe("Dashboard header", () => {
@@ -445,20 +447,14 @@ describe("Dashboard", () => {
       cy.get('[data-cy="page-number-12"]').should("exist").click();
       cy.get('[data-cy="source-account-payment-0"]')
         .should("exist")
-        .should(
-          "have.text",
-          `From: ${sourceAccountPublicKey}`
-        );
+        .should("have.text", `From: ${sourceAccountPublicKey}`);
     });
 
     it("Should show payments with the correct destination account", () => {
       login(keys.loggedUserFundedSecretKey);
       cy.get('[data-cy="destination-account-payment-1"]')
         .should("exist")
-        .should(
-          "have.text",
-          `To: ${destinationAccountPublicKey}`
-        );
+        .should("have.text", `To: ${destinationAccountPublicKey}`);
     });
 
     it("Should show payments with the correct amount", () => {
@@ -486,10 +482,7 @@ describe("Dashboard", () => {
       login(keys.loggedUserFundedSecretKey);
       cy.get('[data-cy="payment-hash-1"]')
         .should("exist")
-        .should(
-          "have.text",
-          `Hash: ${successfulPaymentHash}`
-        );
+        .should("have.text", `Hash: ${successfulPaymentHash}`);
     });
 
     it("Should show the correct status", () => {
@@ -523,6 +516,97 @@ describe("Dashboard", () => {
         cy.get('[data-cy="payment-title-1"]')
           .should("exist")
           .should("have.text", "CREATE_ACCOUNT");
+      });
+    });
+  });
+
+  describe("Receive assets", () => {
+    it("Should have a receive assets button with the text 'Receive'", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="receive-payment-button"]')
+        .should("exist")
+        .should("have.text", "Receive");
+    });
+
+    it("Should display the receive assets modal when the user clicks on the receive assets button", () => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="receive-payment-button"]')
+        .should("exist")
+        .trigger("click");
+      cy.get('[data-cy="receive-payment-modal"]').should("exist");
+    });
+
+    describe("Receive payment modal", () => {
+      beforeEach(() => {
+        login(keys.loggedUserFundedSecretKey);
+        cy.get('[data-cy="receive-payment-button"]')
+          .should("exist")
+          .trigger("click");
+      });
+
+      it("Should have a close button with the text 'Close'", () => {
+        cy.get('[data-cy="close-receive-payment-button"]')
+          .should("exist")
+          .should("have.text", "Close");
+      });
+
+      it("Should be unmounted when the user clicks on the close button", () => {
+        cy.get('[data-cy="close-receive-payment-button"]').click();
+        cy.wait(500);
+        cy.get('[data-cy="qr-code"]').should("not.exist");
+      });
+
+      it("Should have a QR code", () => {
+        cy.get('[data-cy="qr-code"]').should("exist");
+      });
+
+      it("Should have a title with the text 'Your account QR code'", () => {
+        cy.get('[data-cy="receive-modal-title"]')
+          .should("exist")
+          .should("have.text", "Your account QR code");
+      });
+
+      it("Should have a description with the proper text", () => {
+        cy.get('[data-cy="receive-modal-description"]')
+          .should("exist")
+          .should(
+            "have.text",
+            "Scan this QR code using a Stellar wallet app to make a payment to your account."
+          );
+      });
+
+      describe("Copy button", () => {
+        it("Should have a copy button with the text 'Copy'", () => {
+          cy.get('[data-cy="copy-text-modal-button"]')
+            .should("exist")
+            .should("have.text", "Copy public key");
+        });
+
+        it("Should change the text of the copy button to 'Copied! when the user clicks on it", () => {
+          cy.get('[data-cy="copy-text-modal-button"]').trigger("click");
+          cy.get('[data-cy="copy-text-modal-button"]').should(
+            "have.text",
+            "Copied!"
+          );
+        });
+
+        it("Should copy the public key to the clipboard when the user clicks on the copy button", () => {
+          cy.window().then((win) => {
+            win.navigator.clipboard.readText().then((text) => {
+              expect(text).to.eq(keys.loggedUserFundedPublicKey);
+            });
+          });
+        });
+
+        it("Should change the text of the copy button back to 'Copy public key' after 1 second", () => {
+          const DELAY_TIME: number = 1001;
+          cy.get('[data-cy="copy-text-modal-button"]').trigger("click");
+          cy.wait(DELAY_TIME);
+          cy.get('[data-cy="copy-text-modal-button"]').should(
+            "have.text",
+            "Copy public key"
+          );
+        });
       });
     });
   });

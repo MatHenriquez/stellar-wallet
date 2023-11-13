@@ -13,6 +13,9 @@ import getPaymentsHistory, {
 } from "../helpers/paymentsHistory";
 import HistoricalPayments from "../components/HistoricalPayments";
 import Pagination from "@component/components/Pagination";
+import Balance from "@component/components/Balance";
+import KeyView from "@component/components/KeyView";
+import UnfundedMessage from "@component/components/UnfundedMessage";
 
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(false);
@@ -34,6 +37,7 @@ const Dashboard: FC = () => {
     [] as IPaymentHistory[]
   );
   const [numberOfPages, setNumberOfPages] = useState(0 as number);
+  const [showQr, setShowQr] = useState(false);
 
   const getAccountBalance = async (publicKey: string) => {
     try {
@@ -84,9 +88,11 @@ const Dashboard: FC = () => {
       setPublicKey(storedPublicKey);
       setIsLogged(true);
       getAccountBalance(storedPublicKey);
-      getPaymentsHistory(storedPublicKey).then((paymentsHistory: IPaymentHistory[]) => {
-        setPaymentsHistory(paymentsHistory);
-      });
+      getPaymentsHistory(storedPublicKey).then(
+        (paymentsHistory: IPaymentHistory[]) => {
+          setPaymentsHistory(paymentsHistory);
+        }
+      );
     }
   }, []);
 
@@ -109,6 +115,9 @@ const Dashboard: FC = () => {
           balance={balance}
           setShowPaymentModal={setShowPaymentModal}
           isFunded={isFunded}
+          setShowQr={setShowQr}
+          showQr={showQr}
+          publicKey={publicKey}
         />
         <KeyView publicKey={publicKey} />
         <UnfundedMessage isFunded={isFunded} />
@@ -125,7 +134,7 @@ const Dashboard: FC = () => {
           color={alertColor}
           isFunded={isFunded}
         />
-                <div>
+        <div>
           <div className="flex flex-col">
             <h1 className="text-3xl mt-6 p-4" data-cy="payments-history-title">
               Payments History
@@ -152,94 +161,6 @@ const Dashboard: FC = () => {
       </div>
       <Footer />
     </>
-  );
-};
-
-const Balance: FC<{
-  balance: string | undefined;
-  setShowPaymentModal: (value: boolean) => void;
-  isFunded: boolean;
-}> = ({ balance, setShowPaymentModal, isFunded }) => {
-  return (
-    <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
-      <h1 className="text-3xl mt-6" data-cy="balance-title">
-        Your Balance
-      </h1>
-      <div className="flex">
-        <p className="text-4xl font-bold mt-8 p-2" data-cy="balance-value">
-          {balance || 0} Lumens (XLM)
-        </p>
-        <SendPaymentButton
-          setShowPaymentModal={setShowPaymentModal}
-          isFunded={isFunded}
-        />
-      </div>
-    </div>
-  );
-};
-
-const KeyView: FC<{ publicKey: string }> = ({ publicKey }) => {
-  return (
-    <div className="flex flex-col w-full p-4 bg-cyan-900 shadow-lg">
-      <h1 className="text-3xl mt-6" data-cy="public-key-title">
-        Your Stellar Public Key
-      </h1>
-      <p
-        className="text-4xl font-bold mt-8 p-2 break-words"
-        data-cy="public-key-value"
-      >
-        {publicKey}
-      </p>
-    </div>
-  );
-};
-
-const UnfundedMessage: FC<{ isFunded: boolean }> = ({ isFunded }) => {
-  return (
-    <div className="bg-cyan-900 flex justify-center">
-      {!isFunded ? (
-        <div className="text-white px-6 py-4 border-0 rounded flex justify-center mb-4 bg-red-500 w-1/2">
-          <span className="text-xl inline-block mr-5 align-middle"></span>
-          <span className="inline-block align-middle mr-8">
-            This account is currently inactive. To activate it, send at least 1
-            lumen (XLM) to the Stellar public key displayed above.
-          </span>
-        </div>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
-};
-
-const SendPaymentButton: FC<{
-  setShowPaymentModal: (value: boolean) => void;
-  isFunded: boolean;
-}> = ({ setShowPaymentModal, isFunded }) => {
-  return (
-    <button
-      className="flex bg-indigo-950 text-white active:bg-indigo-800 font-bold uppercase text-l px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ml-8 mr-1 mb-1 ease-linear transition-all duration-150 self-center disabled:bg-gray-400"
-      type="button"
-      disabled={!isFunded}
-      onClick={() => setShowPaymentModal(true)}
-      data-cy="send-payment-button"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6 mr-2"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-        />
-      </svg>
-      Send
-    </button>
   );
 };
 
