@@ -14,13 +14,13 @@ export default abstract class AbstractWallet implements IWallet {
 
   public getFriendlyName(): string {
     throw new NotImplementedError();
-}
+  }
 
   public getPublicKey(_privateKey?: string): Promise<string> {
     throw new NotImplementedError();
   }
 
-  public sign(_tx: Transaction): Promise<string> {
+  public sign(_tx: Transaction, _privateKey?: string): Promise<string> {
     throw new NotImplementedError();
   }
 
@@ -28,7 +28,7 @@ export default abstract class AbstractWallet implements IWallet {
     throw new NotImplementedError();
   }
 
-  public getSvgIcon(): FC {
+  public getIconComponent(): FC {
     throw new NotImplementedError();
   }
 

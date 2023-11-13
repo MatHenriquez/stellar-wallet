@@ -39,7 +39,7 @@ export default class Albedo extends AbstractWallet implements IWallet {
     return Albedo.FRIENDLY_NAME;
   }
 
-  public override getSvgIcon(): typeof AlbedoIcon {
+  public override getIconComponent(): typeof AlbedoIcon {
     return AlbedoIcon;
   }
 
