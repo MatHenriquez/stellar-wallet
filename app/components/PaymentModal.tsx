@@ -1,7 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { IPaymentSummary } from "../interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
 import PaymentResponseAlert from "./PaymentResponseAlert";
+import IWallet from "@component/interfaces/wallet";
+import SignButtons from "./wallet/SignButton";
 
 const PaymentModal: FC<{
   showPaymentModal: boolean;
@@ -14,6 +16,9 @@ const PaymentModal: FC<{
   paymentResponse: string;
   color: string;
   isFunded: boolean;
+  wallets: IWallet[];
+  handleSignWithWallet: (wallet: IWallet) => void;
+  signError: string;
 }> = ({
   showPaymentModal,
   setShowPaymentModal,
@@ -24,7 +29,10 @@ const PaymentModal: FC<{
   setFormError,
   paymentResponse,
   color,
-  isFunded
+  isFunded,
+  wallets,
+  handleSignWithWallet,
+  signError,
 }) => {
   const handleResetModal = () => {
     setShowPaymentModal(false);
@@ -61,12 +69,17 @@ const PaymentModal: FC<{
                   <PaymentForm
                     handleSendPayment={handleSendPayment}
                     handleInputChange={handleInputChange}
+                    wallets={wallets}
+                    handleSignWithWallet={handleSignWithWallet}
                   />
                   <PaymentResponseAlert
                     paymentResponse={paymentResponse}
                     color={color}
                   />
                   <FormErrors formError={formError} />
+                  {signError ? (
+                    <span className="text-red-500 font-bold">*{signError}</span>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button
@@ -91,7 +104,14 @@ const PaymentModal: FC<{
 const PaymentForm: FC<{
   handleSendPayment: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ handleSendPayment, handleInputChange }) => {
+  wallets: IWallet[];
+  handleSignWithWallet: (wallet: IWallet) => void;
+}> = ({
+  handleSendPayment,
+  handleInputChange,
+  wallets,
+  handleSignWithWallet,
+}) => {
   return (
     <div>
       <form action="" className="flex flex-col" onSubmit={handleSendPayment}>
@@ -142,6 +162,15 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="signer-account-input"
         />
+
+        <div>
+          <span>Or sign with:</span>
+          {wallets.map((wallet, index) => {
+            if (wallet.getName() !== "secretKey")
+              return <SignButtons key={index} wallet={wallet} handleSignWithWallet={handleSignWithWallet}/>;
+          })}
+        </div>
+
         <input
           className="font-bold uppercase px-6 py-2 w-1/6 mt-4 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 border-2 bg-emerald-600"
           type="submit"
@@ -162,7 +191,9 @@ const FormErrors: FC<{ formError: IFormErrors }> = ({
         <p data-cy="amount-error-message">*{amountError}</p>
       ) : null}
       {destinationPublicKeyError ? (
-        <p data-cy="destination-account-error-message">*{destinationPublicKeyError}</p>
+        <p data-cy="destination-account-error-message">
+          *{destinationPublicKeyError}
+        </p>
       ) : null}
       {signerKeyError ? (
         <p data-cy="signer-account-error-message">*{signerKeyError}</p>
