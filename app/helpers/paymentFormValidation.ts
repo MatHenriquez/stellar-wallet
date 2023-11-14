@@ -5,7 +5,7 @@ import { BASE_FEE, StrKey } from "stellar-sdk";
 const errorMessages = {
   invalidSignerKey: "Invalid signer key",
   invalidDestinationPublicKey: "Invalid destination id",
-  invalidAmount: "Invalid amount"
+  invalidAmount: "Invalid amount",
 };
 
 const errors: IFormErrors = {};
@@ -19,7 +19,8 @@ const isDestinationPublicKeyValid: (destinationPublicKey: string) => void = (
   destinationPublicKey
 ) => {
   if (!StrKey.isValidEd25519PublicKey(destinationPublicKey))
-    errors.destinationPublicKeyError = errorMessages.invalidDestinationPublicKey;
+    errors.destinationPublicKeyError =
+      errorMessages.invalidDestinationPublicKey;
 };
 
 const isAmountInvalid: (
@@ -33,12 +34,12 @@ const isAmountInvalid: (
 
 const isFormValid: (
   formEntries: IPaymentSummary,
-  currentBalance: string | undefined
-) => IFormErrors = (formEntries, currentBalance) => {
-  const { signerKey, destinationPublicKey, amount} =
-    formEntries;
+  currentBalance: string | undefined,
+  isPaymentSignedWithWallet: boolean
+) => IFormErrors = (formEntries, currentBalance, isPaymentSignedWithWallet) => {
+  const { signerKey, destinationPublicKey, amount } = formEntries;
 
-  isSignerKeyValid(signerKey);
+  if (!isPaymentSignedWithWallet) isSignerKeyValid(signerKey);
   isDestinationPublicKeyValid(destinationPublicKey);
   isAmountInvalid(amount, currentBalance);
 
