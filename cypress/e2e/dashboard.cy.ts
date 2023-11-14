@@ -20,7 +20,7 @@ describe("Dashboard", () => {
     cy.get('[data-cy="secretKey-login-button"]').click();
   };
 
-  xdescribe("Dashboard body", () => {
+  describe("Dashboard body", () => {
     it("Should render the header", () => {
       cy.visit("/dashboard");
       cy.get('[data-cy="header-container"]').should("exist");
@@ -62,7 +62,7 @@ describe("Dashboard", () => {
     });
   });
 
-  xdescribe("Dashboard header", () => {
+  describe("Dashboard header", () => {
     it("Should have the wallet brand", () => {
       cy.visit("/dashboard");
       cy.get('[data-cy="header-brand"]').should("have.text", "My_Wallet");
@@ -91,7 +91,7 @@ describe("Dashboard", () => {
         .should("have.text", "Sign out");
     });
 
-    xdescribe("Copy button", () => {
+    describe("Copy button", () => {
       it("Should change the text of the copy button to 'copied! when the user clicks on it", () => {
         cy.visit("/dashboard");
         cy.get('[data-cy="copy-button"]').should("exist").trigger("click");
@@ -117,7 +117,7 @@ describe("Dashboard", () => {
       });
     });
 
-    xdescribe("Log out button", () => {
+    describe("Log out button", () => {
       const homeUrl: string = Cypress.env("HOME_URL") || "";
 
       it("Should redirect the user to the home page when the he clicks on the log out button", () => {
@@ -134,7 +134,7 @@ describe("Dashboard", () => {
     });
   });
 
-  xdescribe("Footer", () => {
+  describe("Footer", () => {
     beforeEach(() => {
       cy.visit("/");
     });
@@ -165,7 +165,7 @@ describe("Dashboard", () => {
       cy.get('[data-cy="repository-link"]').should("exist");
     });
 
-    xdescribe("Footer links", () => {
+    describe("Footer links", () => {
       type LinkType = {
         [key: string]: string;
       };
@@ -200,8 +200,8 @@ describe("Dashboard", () => {
     });
   });
 
-  xdescribe("Send assets", () => {
-    xdescribe("Send assets button", () => {
+  describe("Send assets", () => {
+    describe("Send assets button", () => {
       it("Should have a send assets button with the text 'Send'", () => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="send-payment-button"]')
@@ -224,7 +224,7 @@ describe("Dashboard", () => {
       });
     });
 
-    xdescribe("Payment modal", () => {
+    describe("Payment modal", () => {
       beforeEach(() => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="send-payment-button"]')
@@ -292,7 +292,7 @@ describe("Dashboard", () => {
       });
     });
 
-    xdescribe("Send assets funcionality", () => {
+    describe("Send assets funcionality", () => {
       const {
         validSignerKey,
         unvalidSignerKey,
@@ -396,7 +396,7 @@ describe("Dashboard", () => {
     });
   });
 
-  xdescribe("Payments history", () => {
+  describe("Payments history", () => {
     const {
       sourceAccountPublicKey = Cypress.env("SOURCE_ACCOUNT_PUBLIC_KEY") || "",
       destinationAccountPublicKey = Cypress.env(
@@ -496,7 +496,7 @@ describe("Dashboard", () => {
       cy.get('[data-cy="payment-title-4"]').should("exist");
     });
 
-    xdescribe("Pagination", () => {
+    describe("Pagination", () => {
       it("Should exist", () => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="pagination"]').should("exist");
@@ -519,7 +519,7 @@ describe("Dashboard", () => {
     });
   });
 
-  xdescribe("Receive assets", () => {
+  describe("Receive assets", () => {
     it("Should have a receive assets button with the text 'Receive'", () => {
       login(keys.loggedUserFundedSecretKey);
       cy.get('[data-cy="receive-payment-button"]')
@@ -535,7 +535,7 @@ describe("Dashboard", () => {
       cy.get('[data-cy="receive-payment-modal"]').should("exist");
     });
 
-    xdescribe("Receive payment modal", () => {
+    describe("Receive payment modal", () => {
       beforeEach(() => {
         login(keys.loggedUserFundedSecretKey);
         cy.get('[data-cy="receive-payment-button"]')
@@ -574,7 +574,7 @@ describe("Dashboard", () => {
           );
       });
 
-      xdescribe("Copy button", () => {
+      describe("Copy button", () => {
         it("Should have a copy button with the text 'Copy'", () => {
           cy.get('[data-cy="copy-text-modal-button"]')
             .should("exist")
