@@ -91,7 +91,6 @@ const Dashboard: FC = () => {
 
     setIsPaymentSignedWithWallet(true);
     setWalletSignedTransaction(signedTransaction || "");
-    setSignError("Payment signature error");
   };
 
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
