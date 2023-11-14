@@ -164,10 +164,16 @@ const PaymentForm: FC<{
         />
 
         <div>
-          <span>Or sign with:</span>
+          <span data-cy="sign-transaction-message">Or sign with:</span>
           {wallets.map((wallet, index) => {
             if (wallet.getName() !== "secretKey")
-              return <SignButtons key={index} wallet={wallet} handleSignWithWallet={handleSignWithWallet}/>;
+              return (
+                <SignButtons
+                  key={index}
+                  wallet={wallet}
+                  handleSignWithWallet={handleSignWithWallet}
+                />
+              );
           })}
         </div>
 

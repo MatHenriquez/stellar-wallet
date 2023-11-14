@@ -8,6 +8,7 @@ const SignButton: FC<{
   const walletName = wallet.getFriendlyName();
   return (
     <a
+      data-cy={`sign-with-${wallet.getName()}`}
       className="underline ml-2 hover:cursor-pointer"
       onClick={() => handleSignWithWallet(wallet)}
     >
