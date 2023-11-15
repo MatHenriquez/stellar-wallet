@@ -96,7 +96,7 @@ const Dashboard: FC = () => {
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validatePaymentForm()) {
-      if (isPaymentSignedWithWallet && walletSignedTransaction !== "") {
+      if (isPaymentSignedWithWallet && walletSignedTransaction) {
         const transaction = getTransactionFromXdr(walletSignedTransaction);
         if (transaction) await submitTransaction(transaction);
       } else await sendPayment(paymentSummary);
