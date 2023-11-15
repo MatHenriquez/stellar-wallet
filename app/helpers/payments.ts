@@ -57,7 +57,7 @@ export const buildTransaction = async (
   sourcePublicKey: string,
   destinationPublicKey: string,
   amount: string,
-  memo: string
+  memo?: string
 ) => {
   const sourceAccount = await loadAccount(sourcePublicKey);
 
@@ -72,7 +72,7 @@ export const buildTransaction = async (
         amount: amount,
       })
     )
-    .addMemo(Memo.text(memo))
+    .addMemo(Memo.text(memo || ""))
     .setTimeout(60)
     .build();
 
