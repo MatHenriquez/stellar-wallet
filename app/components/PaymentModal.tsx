@@ -174,19 +174,21 @@ const PaymentForm: FC<{
           <span className="font-bold text-green-500">✔ Signed!</span>
         )}
 
-        <div>
-          <span data-cy="sign-transaction-message">Or sign with:</span>
-          {wallets.map((wallet, index) => {
-            if (wallet.getName() !== SecretKey.NAME)
-              return (
-                <SignButtons
-                  key={index}
-                  wallet={wallet}
-                  handleSignWithWallet={handleSignWithWallet}
-                />
-              );
-          })}
-        </div>
+        {secretKeyInputVisible ? (
+          <div>
+            <span data-cy="sign-transaction-message">Or sign with:</span>
+            {wallets.map((wallet, index) => {
+              if (wallet.getName() !== SecretKey.NAME)
+                return (
+                  <SignButtons
+                    key={index}
+                    wallet={wallet}
+                    handleSignWithWallet={handleSignWithWallet}
+                  />
+                );
+            })}
+          </div>
+        ) : null}
 
         <input
           className="font-bold uppercase px-6 py-2 w-1/6 mt-4 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 border-2 bg-emerald-600"
