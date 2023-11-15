@@ -4,7 +4,13 @@ import Navbar from "../components/Header";
 import accountHelper from "../helpers/account";
 import Footer from "../components/Footer";
 import { IPaymentSummary, IPaymentHistory } from "../interfaces/payments";
-import { sendPayment } from "../helpers/payments";
+import {
+  sendPayment,
+  buildTransaction,
+  signTransactionWithWallet,
+  submitTransaction,
+  getTransactionFromXdr,
+} from "../helpers/payments";
 import PaymentModal from "../components/PaymentModal";
 import { IFormErrors } from "../interfaces/errors";
 import paymentFormValidation from "../helpers/paymentFormValidation";
@@ -16,6 +22,8 @@ import Pagination from "@component/components/Pagination";
 import Balance from "@component/components/Balance";
 import KeyView from "@component/components/KeyView";
 import UnfundedMessage from "@component/components/UnfundedMessage";
+import IWallet from "@component/interfaces/wallet";
+import WalletFactory from "../helpers/WalletFactory";
 
 const Dashboard: FC = () => {
   const [isFunded, setIsFunded] = useState(false);
@@ -38,6 +46,14 @@ const Dashboard: FC = () => {
   );
   const [numberOfPages, setNumberOfPages] = useState(0 as number);
   const [showQr, setShowQr] = useState(false);
+  const [wallets, setWallets] = useState([] as IWallet[]);
+  const [isPaymentSignedWithWallet, setIsPaymentSignedWithWallet] =
+    useState(false);
+  const [signError, setSignError] = useState("" as string);
+  const [walletSignedTransaction, setWalletSignedTransaction] = useState(
+    "" as string
+  );
+  const [secretKeyInputVisible, setSecretKeyInputVisible] = useState(true);
 
   const getAccountBalance = async (publicKey: string) => {
     try {
@@ -53,22 +69,45 @@ const Dashboard: FC = () => {
   const validatePaymentForm = () => {
     const formErrors = paymentFormValidation.isFormValid(
       paymentSummary,
-      balance
+      balance,
+      isPaymentSignedWithWallet
     );
     setFormError(formErrors);
     return !(Object.keys(formErrors).length > 0);
   };
 
+  const handleSignWithWallet = async (wallet: IWallet) => {
+    const transaction = await buildTransaction(
+      publicKey,
+      paymentSummary.destinationPublicKey,
+      paymentSummary.amount,
+      paymentSummary.memo
+    );
+
+    const signedTransaction = await signTransactionWithWallet(
+      transaction,
+      wallet
+    );
+    if (!signedTransaction) setSignError("Payment signature error");
+
+    setSecretKeyInputVisible(false);
+    setIsPaymentSignedWithWallet(true);
+    setWalletSignedTransaction(signedTransaction || "");
+  };
+
   const handleSendPayment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validatePaymentForm()) {
-      await sendPayment(paymentSummary);
-      setShowPaymentModal(false);
-      getAccountBalance(publicKey);
+      if (isPaymentSignedWithWallet && walletSignedTransaction) {
+        const transaction = getTransactionFromXdr(walletSignedTransaction);
+        if (transaction) await submitTransaction(transaction);
+      } else await sendPayment(paymentSummary);
+
+      setAlertColor("green");
       setPaymentResponse("Successful payment");
       setShowPaymentAlert(true);
-      setAlertColor("green");
       setPaymentSummary({} as IPaymentSummary);
+      setFormError({} as IFormErrors);
     } else {
       setAlertColor("red");
       setShowPaymentAlert(true);
@@ -93,6 +132,8 @@ const Dashboard: FC = () => {
           setPaymentsHistory(paymentsHistory);
         }
       );
+      const wallets = WalletFactory.createAll();
+      setWallets(wallets);
     }
   }, []);
 
@@ -133,6 +174,10 @@ const Dashboard: FC = () => {
           paymentResponse={paymentResponse}
           color={alertColor}
           isFunded={isFunded}
+          wallets={wallets}
+          handleSignWithWallet={handleSignWithWallet}
+          signError={signError}
+          secretKeyInputVisible={secretKeyInputVisible}
         />
         <div>
           <div className="flex flex-col">

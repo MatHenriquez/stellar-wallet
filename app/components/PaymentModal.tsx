@@ -1,7 +1,10 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { IPaymentSummary } from "../interfaces/payments";
 import { IFormErrors } from "../interfaces/errors";
 import PaymentResponseAlert from "./PaymentResponseAlert";
+import IWallet from "@component/interfaces/wallet";
+import SignButtons from "./wallet/SignButton";
+import SecretKey from "@component/wallets/secret-key/SecretKey";
 
 const PaymentModal: FC<{
   showPaymentModal: boolean;
@@ -14,6 +17,10 @@ const PaymentModal: FC<{
   paymentResponse: string;
   color: string;
   isFunded: boolean;
+  wallets: IWallet[];
+  handleSignWithWallet: (wallet: IWallet) => void;
+  signError: string;
+  secretKeyInputVisible: boolean;
 }> = ({
   showPaymentModal,
   setShowPaymentModal,
@@ -24,7 +31,11 @@ const PaymentModal: FC<{
   setFormError,
   paymentResponse,
   color,
-  isFunded
+  isFunded,
+  wallets,
+  handleSignWithWallet,
+  signError,
+  secretKeyInputVisible,
 }) => {
   const handleResetModal = () => {
     setShowPaymentModal(false);
@@ -61,12 +72,18 @@ const PaymentModal: FC<{
                   <PaymentForm
                     handleSendPayment={handleSendPayment}
                     handleInputChange={handleInputChange}
+                    wallets={wallets}
+                    handleSignWithWallet={handleSignWithWallet}
+                    secretKeyInputVisible={secretKeyInputVisible}
                   />
                   <PaymentResponseAlert
                     paymentResponse={paymentResponse}
                     color={color}
                   />
                   <FormErrors formError={formError} />
+                  {signError ? (
+                    <span className="text-red-500 font-bold">*{signError}</span>
+                  ) : null}
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button
@@ -91,7 +108,16 @@ const PaymentModal: FC<{
 const PaymentForm: FC<{
   handleSendPayment: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ handleSendPayment, handleInputChange }) => {
+  wallets: IWallet[];
+  handleSignWithWallet: (wallet: IWallet) => void;
+  secretKeyInputVisible: boolean;
+}> = ({
+  handleSendPayment,
+  handleInputChange,
+  wallets,
+  handleSignWithWallet,
+  secretKeyInputVisible,
+}) => {
   return (
     <div>
       <form action="" className="flex flex-col" onSubmit={handleSendPayment}>
@@ -121,7 +147,7 @@ const PaymentForm: FC<{
           data-cy="destination-account-input"
         />
         <label htmlFor="memo" data-cy="memo-label">
-          Memo
+          Memo (Optional)
         </label>
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
@@ -131,17 +157,39 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="memo-input"
         />
+
         <label htmlFor="signer-key" data-cy="signer-account-label">
           Signer
         </label>
-        <input
-          className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
-          type="password"
-          name="signerKey"
-          id="signer-key"
-          onChange={handleInputChange}
-          data-cy="signer-account-input"
-        />
+        {secretKeyInputVisible ? (
+          <input
+            className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
+            type="password"
+            name="signerKey"
+            id="signer-key"
+            onChange={handleInputChange}
+            data-cy="signer-account-input"
+          />
+        ) : (
+          <span className="font-bold text-green-500">✔ Signed!</span>
+        )}
+
+        {secretKeyInputVisible ? (
+          <div>
+            <span data-cy="sign-transaction-message">Or sign with:</span>
+            {wallets.map((wallet, index) => {
+              if (wallet.getName() !== SecretKey.NAME)
+                return (
+                  <SignButtons
+                    key={index}
+                    wallet={wallet}
+                    handleSignWithWallet={handleSignWithWallet}
+                  />
+                );
+            })}
+          </div>
+        ) : null}
+
         <input
           className="font-bold uppercase px-6 py-2 w-1/6 mt-4 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 border-2 bg-emerald-600"
           type="submit"
@@ -162,7 +210,9 @@ const FormErrors: FC<{ formError: IFormErrors }> = ({
         <p data-cy="amount-error-message">*{amountError}</p>
       ) : null}
       {destinationPublicKeyError ? (
-        <p data-cy="destination-account-error-message">*{destinationPublicKeyError}</p>
+        <p data-cy="destination-account-error-message">
+          *{destinationPublicKeyError}
+        </p>
       ) : null}
       {signerKeyError ? (
         <p data-cy="signer-account-error-message">*{signerKeyError}</p>

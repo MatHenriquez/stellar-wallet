@@ -16,9 +16,8 @@ describe("Dashboard", () => {
 
   const login: (secretKey: string) => void = (secretKey) => {
     cy.visit("/");
-    cy.contains("Sign In with your Secret Key").click();
-    cy.get('[type="password"]').type(secretKey);
-    cy.get("#signin-button").click();
+    cy.get('[data-cy="secret-key-input"]').type(secretKey);
+    cy.get('[data-cy="secretKey-login-button"]').click();
   };
 
   describe("Dashboard body", () => {
@@ -53,7 +52,7 @@ describe("Dashboard", () => {
       login(keys.loggedUserFundedSecretKey);
       cy.get('[data-cy="balance-value"]').should(
         "have.text",
-        "18172.9998900 Lumens (XLM)"
+        "18295.9998700 Lumens (XLM)"
       );
     });
 
@@ -608,6 +607,47 @@ describe("Dashboard", () => {
           );
         });
       });
+    });
+  });
+
+  describe("Sign transactions with externals wallets", () => {
+    beforeEach(() => {
+      login(keys.loggedUserFundedSecretKey);
+      cy.get('[data-cy="send-payment-button"]').trigger("click");
+    });
+
+    it("Should have a message to offer the user to sign transactions with an external wallet", () => {
+      cy.get('[data-cy="sign-transaction-message"]')
+        .should("exist")
+        .should("have.text", "Or sign with:");
+    });
+
+    it("Should have a button to sign transactions with Albedo", () => {
+      cy.get('[data-cy="sign-with-albedo"]')
+        .should("exist")
+        .should("have.text", "Albedo");
+    });
+
+    it("Should have a button that opens a window to sign with Albedo", () => {
+      const { validDestinationPublicKey, validAmount } = {
+        validDestinationPublicKey: Cypress.env(
+          "UNFUNDED_DESTINATION_PUBLIC_KEY" || ""
+        ),
+        validAmount: "110",
+      };
+      cy.get('[data-cy="amount-input"]').type(validAmount);
+      cy.window().then((win) => {
+        cy.stub(win, "open").as("open");
+      });
+      cy.get('[data-cy="destination-account-input"]').type(
+        validDestinationPublicKey
+      );
+      cy.get('[data-cy="memo-input"]').type("test");
+      cy.get('[data-cy="sign-with-albedo"]').trigger("click");
+      cy.get("@open").should(
+        "have.been.calledOnceWith",
+        "https://albedo.link/confirm"
+      );
     });
   });
 });
