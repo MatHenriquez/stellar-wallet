@@ -28,7 +28,7 @@ export const submitTransaction = async (transaction: Transaction) => {
 
 const loadAccount = async (publicKey: string) => server.loadAccount(publicKey);
 
-export const sendPayment: (paymentSummary: IPaymentSummary) => void = async ({
+export const sendPayment: (paymentSummary: IPaymentSummary) => Promise<void> = async ({
   signerKey,
   destinationPublicKey,
   amount,
