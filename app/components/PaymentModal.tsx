@@ -20,6 +20,7 @@ const PaymentModal: FC<{
   wallets: IWallet[];
   handleSignWithWallet: (wallet: IWallet) => void;
   signError: string;
+  secretKeyInputVisible: boolean;
 }> = ({
   showPaymentModal,
   setShowPaymentModal,
@@ -34,6 +35,7 @@ const PaymentModal: FC<{
   wallets,
   handleSignWithWallet,
   signError,
+  secretKeyInputVisible,
 }) => {
   const handleResetModal = () => {
     setShowPaymentModal(false);
@@ -72,6 +74,7 @@ const PaymentModal: FC<{
                     handleInputChange={handleInputChange}
                     wallets={wallets}
                     handleSignWithWallet={handleSignWithWallet}
+                    secretKeyInputVisible={secretKeyInputVisible}
                   />
                   <PaymentResponseAlert
                     paymentResponse={paymentResponse}
@@ -107,11 +110,13 @@ const PaymentForm: FC<{
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   wallets: IWallet[];
   handleSignWithWallet: (wallet: IWallet) => void;
+  secretKeyInputVisible: boolean;
 }> = ({
   handleSendPayment,
   handleInputChange,
   wallets,
   handleSignWithWallet,
+  secretKeyInputVisible,
 }) => {
   return (
     <div>
@@ -142,7 +147,7 @@ const PaymentForm: FC<{
           data-cy="destination-account-input"
         />
         <label htmlFor="memo" data-cy="memo-label">
-          Memo
+          Memo (Optional)
         </label>
         <input
           className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
@@ -152,17 +157,22 @@ const PaymentForm: FC<{
           onChange={handleInputChange}
           data-cy="memo-input"
         />
+
         <label htmlFor="signer-key" data-cy="signer-account-label">
           Signer
         </label>
-        <input
-          className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
-          type="password"
-          name="signerKey"
-          id="signer-key"
-          onChange={handleInputChange}
-          data-cy="signer-account-input"
-        />
+        {secretKeyInputVisible ? (
+          <input
+            className="px-2 py-1 placeholder-blueGray-300 text-black relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-5/6"
+            type="password"
+            name="signerKey"
+            id="signer-key"
+            onChange={handleInputChange}
+            data-cy="signer-account-input"
+          />
+        ) : (
+          <span className="font-bold text-green-500">✔ Signed!</span>
+        )}
 
         <div>
           <span data-cy="sign-transaction-message">Or sign with:</span>

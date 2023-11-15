@@ -53,6 +53,7 @@ const Dashboard: FC = () => {
   const [walletSignedTransaction, setWalletSignedTransaction] = useState(
     "" as string
   );
+  const [secretKeyInputVisible, setSecretKeyInputVisible] = useState(true);
 
   const getAccountBalance = async (publicKey: string) => {
     try {
@@ -89,6 +90,7 @@ const Dashboard: FC = () => {
     );
     if (!signedTransaction) setSignError("Payment signature error");
 
+    setSecretKeyInputVisible(false);
     setIsPaymentSignedWithWallet(true);
     setWalletSignedTransaction(signedTransaction || "");
   };
@@ -175,6 +177,7 @@ const Dashboard: FC = () => {
           wallets={wallets}
           handleSignWithWallet={handleSignWithWallet}
           signError={signError}
+          secretKeyInputVisible={secretKeyInputVisible}
         />
         <div>
           <div className="flex flex-col">
