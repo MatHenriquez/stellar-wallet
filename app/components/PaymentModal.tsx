@@ -4,6 +4,7 @@ import { IFormErrors } from "../interfaces/errors";
 import PaymentResponseAlert from "./PaymentResponseAlert";
 import IWallet from "@component/interfaces/wallet";
 import SignButtons from "./wallet/SignButton";
+import SecretKey from "@component/wallets/secret-key/SecretKey";
 
 const PaymentModal: FC<{
   showPaymentModal: boolean;
@@ -166,7 +167,7 @@ const PaymentForm: FC<{
         <div>
           <span data-cy="sign-transaction-message">Or sign with:</span>
           {wallets.map((wallet, index) => {
-            if (wallet.getName() !== "secretKey")
+            if (wallet.getName() !== SecretKey.NAME)
               return (
                 <SignButtons
                   key={index}
